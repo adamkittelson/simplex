@@ -4,7 +4,7 @@ defmodule Simplex.Mixfile do
   def project do
     [app: :simplex,
      version: "0.0.1",
-     elixir: "~> 0.15.0",
+     elixir: "~> 1.0.0-rc1",
      deps: deps]
   end
 
@@ -25,6 +25,6 @@ defmodule Simplex.Mixfile do
   #
   # Type `mix help deps` for more examples and options
   defp deps do
-    []
+    [{:timex, "~> 0.12.5"}]
   end
 end
