@@ -1,6 +1,14 @@
 defmodule Simplex.Request do
   alias Simplex.Parameters
+  alias Simplex.Response
   use Timex
+
+  def get(params) do
+    response = "https://sdb.amazonaws.com"
+                |> signed(params)
+                |> HTTPoison.get
+    Response.handle(params["Action"], response)
+  end
 
   def signed(url, params) do
     uri = URI.parse(url)
