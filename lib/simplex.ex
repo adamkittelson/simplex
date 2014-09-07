@@ -3,7 +3,7 @@ defmodule Simplex do
   import SweetXml
 
   defmodule Success do
-    defstruct status_code: nil, body: %{}, metadata: %{}, full_response: nil
+    defstruct status_code: nil, result: %{}, metadata: %{}, next_token: nil, full_response: nil
   end
 
   defmodule ClientError do
