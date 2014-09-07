@@ -12,7 +12,7 @@ defmodule Simplex.Mixfile do
   #
   # Type `mix help compile.app` for more information
   def application do
-    [applications: [:logger]]
+    [applications: [:logger, :httpoison]]
   end
 
   # Dependencies can be hex.pm packages:
@@ -25,6 +25,11 @@ defmodule Simplex.Mixfile do
   #
   # Type `mix help deps` for more examples and options
   defp deps do
-    [{:timex, "~> 0.12.5"}]
+    [
+      {:timex, "~> 0.12.5"},
+      {:erlsha2,  github: "vinoski/erlsha2"},
+      {:httpoison, "~> 0.4.2"},
+      {:sweet_xml, "~> 0.1.0"}
+    ]
   end
 end
