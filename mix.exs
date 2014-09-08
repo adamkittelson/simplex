@@ -29,7 +29,8 @@ defmodule Simplex.Mixfile do
       {:timex, "~> 0.12.5"},
       {:erlsha2,  github: "vinoski/erlsha2"},
       {:httpoison, "~> 0.4.2"},
-      {:sweet_xml, "~> 0.1.0"}
+      {:sweet_xml, "~> 0.1.0"},
+      {:uuid, "~> 0.1.5"}
     ]
   end
 end
