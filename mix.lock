@@ -5,6 +5,6 @@
   "jsx": {:git, "git://github.com/talentdeficit/jsx.git", "507fa4c41db33c81e925ab53f4d789d234aaff2f", [ref: "master"]},
   "lhttpc": {:git, "git://github.com/talko/lhttpc", "2d01a5f9c7543b77bdd57f44c92e72801f46e423", [ref: "master"]},
   "meck": {:git, "https://github.com/eproxus/meck.git", "eb479aa20cd430f62b6c043e826f0eb88a029852", [ref: "master"]},
-  "sweet_xml": {:git, "git://github.com/adamkittelson/sweet_xml.git", "06db07d1b9eb4ce77afacb80df08b9e2c084d7de", [ref: "06db07d1b9eb4ce77afacb80df08b9e2c084d7de"]},
+  "sweet_xml": {:package, "0.1.1"},
   "timex": {:package, "0.12.5"},
   "uuid": {:package, "0.1.5"}}

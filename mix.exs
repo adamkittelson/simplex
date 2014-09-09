@@ -4,7 +4,7 @@ defmodule Simplex.Mixfile do
   def project do
     [app: :simplex,
      version: "0.0.1",
-     elixir: "~> 1.0.0-rc1",
+     elixir: "~> 1.0.0-rc2",
      deps: deps]
   end
 
@@ -29,8 +29,7 @@ defmodule Simplex.Mixfile do
       {:timex, "~> 0.12.5"},
       {:erlsha2,  github: "vinoski/erlsha2"},
       {:httpoison, "~> 0.4.2"},
-      {:sweet_xml, github: "adamkittelson/sweet_xml", ref: "06db07d1b9eb4ce77afacb80df08b9e2c084d7de"},
-      {:uuid, "~> 0.1.5"}
+      {:sweet_xml, "~> 0.1.1"}
     ]
   end
 end
