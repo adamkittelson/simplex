@@ -47,17 +47,17 @@ defmodule Simplex.Attributes do
        end)
   end
 
-  def parse_attribute({key, value}) when is_binary(value) do
-    [%{
-      "Attribute.{index}.Name" => key,
-      "Attribute.{index}.Value" => value
-     }]
-  end
-
   def parse_attribute({key, values}) when is_list(values) do
     Enum.reduce(values, [], fn(value, list) ->
       list ++ parse_attribute({key, value})
     end)
+  end
+
+  def parse_attribute({key, value}) do
+    [%{
+      "Attribute.{index}.Name" => key,
+      "Attribute.{index}.Value" => to_string(value)
+     }]
   end
 
   defp format_expected(expected) do
