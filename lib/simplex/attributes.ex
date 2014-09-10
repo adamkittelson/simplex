@@ -11,11 +11,21 @@ defmodule Simplex.Attributes do
 
   def put(domain_name, item_name, attributes, expected \\ %{}) do
     params = expected
-              |> format_expected
-              |> Map.merge(parse_attributes(attributes))
-              |> Map.merge(%{"Action"     => "PutAttributes",
-                             "DomainName" => domain_name,
-                             "ItemName"   => item_name})
+             |> format_expected
+             |> Map.merge(parse_attributes(attributes))
+             |> Map.merge(%{"Action"     => "PutAttributes",
+                            "DomainName" => domain_name,
+                            "ItemName"   => item_name})
+    Request.get(params)
+  end
+
+  def delete(domain_name, item_name, attributes \\ %{}, expected \\ %{}) do
+    params = expected
+             |> format_expected
+             |> Map.merge(parse_attributes(attributes))
+             |> Map.merge(%{"Action"     => "DeleteAttributes",
+                            "DomainName" => domain_name,
+                            "ItemName"   => item_name})
     Request.get(params)
   end
 

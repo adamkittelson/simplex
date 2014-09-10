@@ -71,6 +71,16 @@ defmodule Simplex.Response do
     {:ok, nil, response}
   end
 
+  def handle("DeleteAttributes", %HTTPoison.Response{status_code: 200, body: body} = response) do
+    body = body
+           |> xmap(meta: [~x"//ResponseMetadata",
+                     request_id: ~x".//RequestId/text()",
+                     box_usage: ~x".//BoxUsage/text()"])
+
+    response = %Response{status_code: 200, raw_body: response.body, body: body, headers: response.headers}
+    {:ok, nil, response}
+  end
+
   def handle("Select", %HTTPoison.Response{status_code: 200, body: body} = response) do
       body = body
              |> xmap(meta: [~x"//ResponseMetadata",
