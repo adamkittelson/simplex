@@ -17,7 +17,7 @@ defmodule Simplex.Request do
 
     request = Enum.join(["GET", uri.host, uri.path || "/", query], "\n")
 
-    signature = :hmac.hmac256(System.get_env("AWS_SECRET_ACCESS_KEY"), request)
+    signature = :crypto.hmac(:sha256, String.to_char_list(System.get_env("AWS_SECRET_ACCESS_KEY")), String.to_char_list(request))
                 |> :base64.encode
                 |> URI.encode
                 |> String.replace("/", "%2F")
