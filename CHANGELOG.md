@@ -7,3 +7,6 @@ CHANGELOG
 
 ---- 0.0.2 / 2014-09-11 / configuration ----------------------------------------
 * configurable aws creds and simpledb url
+
+---- 0.0.3 / 2014-09-12 / docs-and-tests ---------------------------------------
+* set up travis/coveralls
