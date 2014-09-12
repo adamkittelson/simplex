@@ -3,7 +3,7 @@ defmodule Simplex.Mixfile do
 
   def project do
     [app: :simplex,
-     version: "0.0.1",
+     version: version,
      elixir: "~> 1.0.0",
      deps: deps]
   end
@@ -30,5 +30,12 @@ defmodule Simplex.Mixfile do
       {:httpoison, "~> 0.4.2"},
       {:sweet_xml, "~> 0.1.1"}
     ]
+  end
+
+  defp version do
+     ~r/[0-9]+/
+     |> Regex.scan(File.read!("VERSION.yml"))
+     |> List.flatten
+     |> Enum.join(".")
   end
 end
