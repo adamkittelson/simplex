@@ -4,9 +4,9 @@ defmodule Simplex.Request do
   use Timex
 
   def get(params) do
-    response = "https://sdb.amazonaws.com"
-                |> signed(params)
-                |> HTTPoison.get
+    response = Simplex.simpledb_url
+               |> signed(params)
+               |> HTTPoison.get
     Response.handle(params["Action"], response)
   end
 
@@ -17,7 +17,7 @@ defmodule Simplex.Request do
 
     request = Enum.join(["GET", uri.host, uri.path || "/", query], "\n")
 
-    signature = :crypto.hmac(:sha256, String.to_char_list(System.get_env("AWS_SECRET_ACCESS_KEY")), String.to_char_list(request))
+    signature = :crypto.hmac(:sha256, String.to_char_list(Simplex.aws_secret_access_key), String.to_char_list(request))
                 |> :base64.encode
                 |> URI.encode
                 |> String.replace("/", "%2F")
@@ -29,7 +29,7 @@ defmodule Simplex.Request do
 
   defp auth_params do
     [
-      AWSAccessKeyId: System.get_env("AWS_ACCESS_KEY_ID"),
+      AWSAccessKeyId: Simplex.aws_access_key,
       SignatureVersion: 2,
       SignatureMethod: "HmacSHA256",
       Timestamp: DateFormat.format!(Date.now, "{ISOz}")
