@@ -5,3 +5,5 @@
 CHANGELOG
 =========
 
+---- 0.0.2 / 2014-09-11 / configuration ----------------------------------------
+* configurable aws creds and simpledb url
