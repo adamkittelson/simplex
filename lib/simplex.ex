@@ -2,7 +2,7 @@ defmodule Simplex do
   use Application
   alias Simplex.Config
 
-  def start(_type, args) do
+  def start(_type, _args) do
     Simplex.Supervisor.start_link
   end
 

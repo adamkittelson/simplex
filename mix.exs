@@ -4,6 +4,7 @@ defmodule Simplex.Mixfile do
   def project do
     [app: :simplex,
      version: version,
+     test_coverage: [tool: ExCoveralls],
      elixir: "~> 1.0.0",
      deps: deps]
   end
@@ -25,11 +26,12 @@ defmodule Simplex.Mixfile do
   #   {:mydep, git: "https://github.com/elixir-lang/mydep.git", tag: "0.1"}
   #
   # Type `mix help deps` for more examples and options
-  defp deps do
+  def deps do
     [
       {:timex, "~> 0.12.5"},
       {:httpoison, "~> 0.4.2"},
-      {:sweet_xml, "~> 0.1.1"}
+      {:sweet_xml, "~> 0.1.1"},
+      {:excoveralls, "~> 0.3", only: [:dev, :test]}
     ]
   end
 
