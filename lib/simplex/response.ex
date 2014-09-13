@@ -6,9 +6,9 @@ defmodule Simplex.Response do
 
   def handle("CreateDomain", %HTTPoison.Response{status_code: 200, body: body} = response) do
     body = body
-           |> xmap(meta: [~x"//ResponseMetadata",
-                     request_id: ~x".//RequestId/text()",
-                     box_usage: ~x".//BoxUsage/text()"])
+           |> xmap(request_id: ~x"//ResponseMetadata/RequestId/text()",
+                   box_usage: ~x"//ResponseMetadata/BoxUsage/text()")
+           |> stringify_values
 
     response = %Response{status_code: 200, raw_body: response.body, body: body, headers: response.headers}
     {:ok, nil, response}
@@ -16,11 +16,11 @@ defmodule Simplex.Response do
 
   def handle("ListDomains", %HTTPoison.Response{status_code: 200, body: body} = response) do
     body = body
-           |> xmap(meta: [~x"//ResponseMetadata",
-                     request_id: ~x".//RequestId/text()",
-                     box_usage: ~x".//BoxUsage/text()"],
+           |> xmap(request_id: ~x"//ResponseMetadata/RequestId/text()",
+                   box_usage: ~x"//ResponseMetadata/BoxUsage/text()",
                    result: ~x"//ListDomainsResponse/ListDomainsResult/DomainName/text()"l,
                    next_token: ~x"//ListDomainsResponse/ListDomainsResult/NextToken/text()")
+           |> stringify_values
     response = %Response{status_code: 200, raw_body: response.body, body: body, headers: response.headers}
     result = Enum.map(body[:result], &to_string/1)
     {:ok, result, response}
@@ -28,9 +28,9 @@ defmodule Simplex.Response do
 
   def handle("DeleteDomain", %HTTPoison.Response{status_code: 200, body: body} = response) do
       body = body
-             |> xmap(meta: [~x"//ResponseMetadata",
-                       request_id: ~x".//RequestId/text()",
-                       box_usage: ~x".//BoxUsage/text()"])
+             |> xmap(request_id: ~x"//ResponseMetadata/RequestId/text()",
+                      box_usage: ~x"//ResponseMetadata/BoxUsage/text()")
+             |> stringify_values
      response = %Response{status_code: 200, raw_body: response.body, body: body, headers: response.headers}
      {:ok, nil, response}
   end
@@ -147,4 +147,19 @@ defmodule Simplex.Response do
     Enum.map(errors, &("#{&1[:code]}: #{&1[:message]}"))
   end
 
+  defp stringify_values(nil), do: nil
+  defp stringify_values(value) when is_atom(value), do: nil
+  defp stringify_values(%{} = map) do
+    Enum.reduce(map, %{}, fn({key, value}, result) ->
+      Map.put(result, key, stringify_values(value))
+    end)
+  end
+
+  defp stringify_values(value) do
+    if Enum.all?(value, &is_integer/1)  do
+      to_string(value)
+    else
+      Enum.map(value, &stringify_values/1)
+    end
+  end
 end
