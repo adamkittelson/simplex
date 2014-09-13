@@ -3,6 +3,10 @@ defmodule SimplexTest do
 
   setup context do
 
+    Simplex.aws_access_key(nil)
+    Simplex.aws_secret_access_key(nil)
+    Simplex.simpledb_url(nil)
+
     if env_aws_access_key = context[:env_aws_access_key] do
       System.put_env("SIMPLEX_AWS_ACCESS_KEY", env_aws_access_key)
     end
