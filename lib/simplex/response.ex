@@ -121,6 +121,7 @@ defmodule Simplex.Response do
                         box_usage: ~x".//BoxUsage/text()"
                       ],
                      request_id: ~x".//RequestId/text()"])
+           |> stringify_values
 
     response = %Response{status_code: code, raw_body: response.body, body: body[:response], headers: response.headers}
     {:error, format_errors(body[:response][:errors]), response}
@@ -133,6 +134,7 @@ defmodule Simplex.Response do
                         code: ~x".//Code/text()",
                         message: ~x".//Message/text()"
                       ]])
+           |> stringify_values
 
     response = %Response{status_code: code, raw_body: response.body, body: body[:response], headers: response.headers}
     {:error, format_errors(body[:response][:errors]), response}
