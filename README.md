@@ -16,7 +16,7 @@ Install the [Hex.pm](http://hex.pm) package
     ```elixir
     def deps do
       [
-        {:simplex, github: "adamkittelson/simplex"}
+        {:simplex, "0.1.0"}
       ]
     end
     ```
