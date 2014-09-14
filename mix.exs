@@ -6,7 +6,13 @@ defmodule Simplex.Mixfile do
      version: version,
      test_coverage: [tool: ExCoveralls],
      elixir: "~> 1.0.0",
-     deps: deps]
+     deps: deps,
+     package: [
+       contributors: ["Adam Kittelson"],
+       licenses: ["MIT"],
+       links: %{ github: "https://github.com/adamkittelson/simplex" }
+     ],
+     description: "An Elixir library for interacting with the Amazon SimpleDB API."]
   end
 
   # Configuration for the OTP application
