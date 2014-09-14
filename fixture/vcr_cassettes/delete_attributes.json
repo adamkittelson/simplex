@@ -1,0 +1,24 @@
+[
+  {
+    "request": {
+      "body": "",
+      "headers": [],
+      "method": "get",
+      "options": {
+        "connect_timeout": 5000
+      },
+      "url": "https://sdb.amazonaws.com/?AWSAccessKeyId=access-key&Action=DeleteAttributes&DomainName=AttributesTestDomain&Expected.Name=name&Expected.Value=Adam&ItemName=attribute_test_id&SignatureMethod=HmacSHA256&SignatureVersion=2&Timestamp=2014-09-13T22%3A11%3A11Z&Version=2009-04-15&Signature=signature"
+    },
+    "response": {
+      "body": "<?xml version=\"1.0\"?>\n<DeleteAttributesResponse xmlns=\"http://sdb.amazonaws.com/doc/2009-04-15/\"><ResponseMetadata><RequestId>c4cd105f-f065-1ea5-8d78-3ffe919b4cc5</RequestId><BoxUsage>0.0000219907</BoxUsage></ResponseMetadata></DeleteAttributesResponse>",
+      "headers": {
+        "Content-Type": "text/xml",
+        "Transfer-Encoding": "chunked",
+        "Date": "Sat, 13 Sep 2014 22:11:11 GMT",
+        "Server": "Amazon SimpleDB"
+      },
+      "status_code": 200,
+      "type": "ok"
+    }
+  }
+]

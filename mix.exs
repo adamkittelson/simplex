@@ -31,7 +31,8 @@ defmodule Simplex.Mixfile do
       {:timex, "~> 0.12.5"},
       {:httpoison, "~> 0.4.2"},
       {:sweet_xml, "~> 0.1.1"},
-      {:excoveralls, "~> 0.3", only: [:dev, :test]}
+      {:excoveralls, "~> 0.3", only: [:dev, :test]},
+      {:exvcr, "~> 0.3.2", only: [:dev, :test]}
     ]
   end
 

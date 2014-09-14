@@ -1,0 +1,24 @@
+[
+  {
+    "request": {
+      "body": "",
+      "headers": [],
+      "method": "get",
+      "options": {
+        "connect_timeout": 5000
+      },
+      "url": "https://sdb.amazonaws.com/?AWSAccessKeyId=access-key&Action=ListDomains&SignatureMethod=HmacSHA256&SignatureVersion=2&Timestamp=2014-09-13T02%3A20%3A46Z&Version=2009-04-15&Signature=signature"
+    },
+    "response": {
+      "body": "<?xml version=\"1.0\"?>\n<ListDomainsResponse xmlns=\"http://sdb.amazonaws.com/doc/2009-04-15/\"><ListDomainsResult><DomainName>test</DomainName><DomainName>test_domain</DomainName></ListDomainsResult><ResponseMetadata><RequestId>8d85ba40-c3f1-5ff5-50ea-9dfdc2fa103c</RequestId><BoxUsage>0.0000071759</BoxUsage></ResponseMetadata></ListDomainsResponse>",
+      "headers": {
+        "Content-Type": "text/xml",
+        "Transfer-Encoding": "chunked",
+        "Date": "Sat, 13 Sep 2014 02:20:44 GMT",
+        "Server": "Amazon SimpleDB"
+      },
+      "status_code": 200,
+      "type": "ok"
+    }
+  }
+]

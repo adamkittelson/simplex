@@ -1,0 +1,24 @@
+[
+  {
+    "request": {
+      "body": "",
+      "headers": [],
+      "method": "get",
+      "options": {
+        "connect_timeout": 5000
+      },
+      "url": "https://sdb.amazonaws.com/?AWSAccessKeyId=access-key&Action=DeleteDomain&DomainName=test_domain&SignatureMethod=HmacSHA256&SignatureVersion=2&Timestamp=2014-09-13T02%3A25%3A01Z&Version=2009-04-15&Signature=signature"
+    },
+    "response": {
+      "body": "<?xml version=\"1.0\"?>\n<DeleteDomainResponse xmlns=\"http://sdb.amazonaws.com/doc/2009-04-15/\"><ResponseMetadata><RequestId>e4aead9f-b877-c4dc-98eb-3cc9538699d9</RequestId><BoxUsage>0.0055590278</BoxUsage></ResponseMetadata></DeleteDomainResponse>",
+      "headers": {
+        "Content-Type": "text/xml",
+        "Transfer-Encoding": "chunked",
+        "Date": "Sat, 13 Sep 2014 02:24:59 GMT",
+        "Server": "Amazon SimpleDB"
+      },
+      "status_code": 200,
+      "type": "ok"
+    }
+  }
+]

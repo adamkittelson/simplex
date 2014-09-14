@@ -1,0 +1,24 @@
+[
+  {
+    "request": {
+      "body": "",
+      "headers": [],
+      "method": "get",
+      "options": {
+        "connect_timeout": 5000
+      },
+      "url": "https://sdb.amazonaws.com/?AWSAccessKeyId=access-key&Action=PutAttributes&Attribute.1.Name=email_addresses&Attribute.1.Value=adam%40apathydrive.com&Attribute.2.Name=email_addresses&Attribute.2.Value=adam%40zencoder.com&Attribute.3.Name=email_addresses&Attribute.3.Value=akittelson%40brightcove.com&Attribute.4.Name=name&Attribute.4.Replace=true&Attribute.4.Value=Adam&DomainName=AttributesTestDomain&ItemName=attribute_test_id&SignatureMethod=HmacSHA256&SignatureVersion=2&Timestamp=2014-09-13T22%3A11%3A11Z&Version=2009-04-15&Signature=signature"
+    },
+    "response": {
+      "body": "<?xml version=\"1.0\"?>\n<PutAttributesResponse xmlns=\"http://sdb.amazonaws.com/doc/2009-04-15/\"><ResponseMetadata><RequestId>bbc9714d-6a32-5284-8d9e-0ef3c990b026</RequestId><BoxUsage>0.0000220035</BoxUsage></ResponseMetadata></PutAttributesResponse>",
+      "headers": {
+        "Content-Type": "text/xml",
+        "Transfer-Encoding": "chunked",
+        "Date": "Sat, 13 Sep 2014 22:11:11 GMT",
+        "Server": "Amazon SimpleDB"
+      },
+      "status_code": 200,
+      "type": "ok"
+    }
+  }
+]
