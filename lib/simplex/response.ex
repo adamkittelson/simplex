@@ -80,9 +80,8 @@ defmodule Simplex.Response do
 
   def handle("Select", %HTTPoison.Response{status_code: 200, body: body} = response) do
       body = body
-             |> xmap(meta: [~x"//ResponseMetadata",
-                       request_id: ~x".//RequestId/text()",
-                       box_usage: ~x".//BoxUsage/text()"],
+             |> xmap(request_id: ~x"//ResponseMetadata/RequestId/text()",
+                     box_usage: ~x"//ResponseMetadata/BoxUsage/text()",
                      items: [~x"//SelectResponse/SelectResult/Item"le,
                        name: ~x".//Name/text()",
                        attributes: [~x".//Attribute"l,
@@ -90,21 +89,20 @@ defmodule Simplex.Response do
                          value: ~x".//Value/text()"
                        ]
                      ])
+             |> stringify_values
 
      result = Enum.reduce(body[:items], [], fn(item, list) ->
                 attributes = Enum.reduce(item[:attributes], %{}, fn(attribute, map) ->
-                            name = to_string(attribute[:name])
-                            value = to_string(attribute[:value])
-                            case map[name] do
+                            case map[attribute[:name]] do
                               nil ->
-                                Map.put(map, name, value)
+                                Map.put(map, attribute[:name], attribute[:value])
                               old_value when is_binary(old_value) ->
-                                Map.put(map, name, [value, old_value])
+                                Map.put(map, attribute[:name], [attribute[:value], old_value])
                               old_value when is_list(old_value) ->
-                                Map.put(map, name, [value | old_value])
+                                Map.put(map, attribute[:name], [attribute[:value] | old_value])
                             end
                           end)
-                [%{name: to_string(item[:name]), attributes: attributes} | list]
+                [%{name: item[:name], attributes: attributes} | list]
               end)
 
 

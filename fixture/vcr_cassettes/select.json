@@ -1,0 +1,24 @@
+[
+  {
+    "request": {
+      "body": "",
+      "headers": [],
+      "method": "get",
+      "options": {
+        "connect_timeout": 5000
+      },
+      "url": "https://sdb.amazonaws.com/?AWSAccessKeyId=access-key&Action=Select&SelectExpression=select%20%2A%20from%20SelectTestDomain&SignatureMethod=HmacSHA256&SignatureVersion=2&Timestamp=2014-09-13T23%3A56%3A21Z&Version=2009-04-15&Signature=signature"
+    },
+    "response": {
+      "body": "<?xml version=\"1.0\"?>\n<SelectResponse xmlns=\"http://sdb.amazonaws.com/doc/2009-04-15/\"><SelectResult><Item><Name>select_test_1</Name><Attribute><Name>name</Name><Value>Adam</Value></Attribute><Attribute><Name>email_addresses</Name><Value>adam@zencoder.com</Value></Attribute><Attribute><Name>email_addresses</Name><Value>adam@apathydrive.com</Value></Attribute><Attribute><Name>email_addresses</Name><Value>akittelson@brightcove.com</Value></Attribute></Item><Item><Name>select_test_2</Name><Attribute><Name>name</Name><Value>Nova</Value></Attribute><Attribute><Name>email_addresses</Name><Value>nova@apathydrive.com</Value></Attribute></Item></SelectResult><ResponseMetadata><RequestId>1d8bf722-fcbe-74e7-bc47-14c30b3281ad</RequestId><BoxUsage>0.0000320033</BoxUsage></ResponseMetadata></SelectResponse>",
+      "headers": {
+        "Content-Type": "text/xml",
+        "Transfer-Encoding": "chunked",
+        "Date": "Sat, 13 Sep 2014 23:56:21 GMT",
+        "Server": "Amazon SimpleDB"
+      },
+      "status_code": 200,
+      "type": "ok"
+    }
+  }
+]
