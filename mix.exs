@@ -10,7 +10,8 @@ defmodule Simplex.Mixfile do
      package: [
        contributors: ["Adam Kittelson"],
        licenses: ["MIT"],
-       links: %{ github: "https://github.com/adamkittelson/simplex" }
+       links: %{ github: "https://github.com/adamkittelson/simplex" },
+       files: ["lib/*", "mix.exs", "README.md", "LICENSE.md", "CHANGELOG.md", "VERSION.yml"]
      ],
      description: "An Elixir library for interacting with the Amazon SimpleDB API."]
   end
