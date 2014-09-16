@@ -9,6 +9,7 @@
   "jsx": {:package, "2.1.1"},
   "lhttpc": {:git, "git://github.com/talko/lhttpc", "2d01a5f9c7543b77bdd57f44c92e72801f46e423", [ref: "master"]},
   "meck": {:package, "0.8.2"},
+  "poison": {:package, "1.2.0"},
   "sweet_xml": {:package, "0.1.1"},
   "timex": {:package, "0.12.5"},
   "uuid": {:package, "0.1.5"}}

@@ -28,6 +28,18 @@ defmodule Simplex.Config do
     GenServer.cast(__MODULE__, {:set_simpledb_url, url})
   end
 
+  def needs_refresh?(config) do
+    !config[:aws_access_key] || !config[:aws_secret_access_key]
+  end
+
+  def load_credentials_from_metadata do
+    %HTTPoison.Response{:body => role_name} = HTTPoison.get("http://169.254.169.254/latest/meta-data/iam/security-credentials/")
+    %HTTPoison.Response{:body => body} = HTTPoison.get("http://169.254.169.254/latest/meta-data/iam/security-credentials/#{role_name}")
+    require IEx
+    IEx.pry
+    Poison.decode!(body)
+  end
+
   ###################
   # Server Callbacks
 
