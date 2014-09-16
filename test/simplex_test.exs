@@ -1,5 +1,6 @@
 defmodule SimplexTest do
   use ExUnit.Case
+  use ExVCR.Mock, adapter: ExVCR.Adapter.Hackney
 
   setup context do
 
@@ -28,7 +29,22 @@ defmodule SimplexTest do
       System.delete_env("SIMPLEX_SIMPLEDB_URL")
     end
 
+    ExVCR.Config.cassette_library_dir("fixture/vcr_cassettes")
+    HTTPoison.start
+
     :ok
+  end
+
+  test "gets access_key from IAM" do
+    use_cassette "access_key_iam" do
+      assert Simplex.aws_access_key == "1234"
+    end
+  end
+
+  test "gets secret_key from IAM" do
+    use_cassette "access_secret_key_iam" do
+      assert Simplex.aws_secret_access_key == "5678"
+    end
   end
 
   test "gets default simpledb_url" do
