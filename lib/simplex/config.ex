@@ -1,5 +1,6 @@
 defmodule Simplex.Config do
   use GenServer
+  use Timex
 
   #############
   # Client API
