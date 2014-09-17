@@ -3,8 +3,8 @@ defmodule AttributesTest do
   use ExVCR.Mock, adapter: ExVCR.Adapter.Hackney
 
   setup_all do
-    Simplex.aws_access_key "access-key"
-    Simplex.aws_secret_access_key "secret-access-key"
+    {:ok, simplex} = Simplex.new("access-key", "secret-access-key")
+    Process.register(simplex, :simplex)
 
     ExVCR.Config.cassette_library_dir("fixture/vcr_cassettes")
     HTTPoison.start
@@ -13,7 +13,9 @@ defmodule AttributesTest do
 
   test "putting attributes" do
     use_cassette "put_attributes" do
-      {:ok, result, response} = Simplex.Attributes.put("AttributesTestDomain",
+
+      {:ok, result, response} = Simplex.Attributes.put(:simplex,
+                                                       "AttributesTestDomain",
                                                        "attribute_test_id",
                                                        %{"name" => {:replace, "Adam"},
                                                          "email_addresses" => ["adam@apathydrive.com",
@@ -28,7 +30,7 @@ defmodule AttributesTest do
 
   test "getting attributes" do
     use_cassette "get_attributes" do
-      {:ok, result, response} = Simplex.Attributes.get("AttributesTestDomain", "attribute_test_id")
+      {:ok, result, response} = Simplex.Attributes.get(:simplex, "AttributesTestDomain", "attribute_test_id")
       assert response.status_code == 200
       assert result == %{"name" => "Adam",
                          "email_addresses" => ["akittelson@brightcove.com",
@@ -45,7 +47,7 @@ defmodule AttributesTest do
 
   test "deleting attributes" do
     use_cassette "delete_attributes" do
-      {:ok, result, response} = Simplex.Attributes.delete("AttributesTestDomain",
+      {:ok, result, response} = Simplex.Attributes.delete(:simplex, "AttributesTestDomain",
                                                           "attribute_test_id",
                                                            %{},
                                                            %{"Name" => "name", "Value" => "Adam"})

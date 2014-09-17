@@ -19,3 +19,6 @@ CHANGELOG
 
 ---- 0.1.2 / 2014-09-17 / metadata-credentials ---------------------------------
 * retrieve access keys from IAM roles when running in EC2
+
+---- 0.1.3 / 2014-09-17 / refactor-config --------------------------------------
+* allow multiple configs instead of one global config

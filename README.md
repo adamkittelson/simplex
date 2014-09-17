@@ -16,18 +16,15 @@ Install the [Hex.pm](http://hex.pm) package
     ```elixir
     def deps do
       [
-        {:simplex, "0.1.2"}
+        {:simplex, "0.2.0"}
       ]
     end
     ```
 
-2. Add `:simplex` to your application dependencies:
 
-    ```elixir
-    def application do
-      [applications: [:simplex]]
-    end
-    ```
+### Configuration
+
+`{:ok, simplex} = Simplex.new`
 
 #### AWS Keys
 
@@ -37,13 +34,28 @@ There are two ways to provide your keys to the Simplex library:
 
 1. Set them from within your application
     ```elixir
-    Simplex.aws_access_key "your-access-key"
-    Simplex.aws_secret_access_key "your-secret-access-key"
+    {:ok, simplex} = Simplex.new("your-access-key", "your-secret-access-key")
     ```
 
-2. Set them as the environment variables `SIMPLEX_AWS_ACCESS_KEY` and `SIMPLEX_AWS_SECRET_ACCESS_KEY`
+    or
+
+    ```elixir
+    {:ok, simplex} = Simplex.new
+    Simplex.aws_access_key(simplex, "your-access-key")
+    Simplex.aws_secret_access_key(simplex, "your-secret-access-key")
     ```
-    SIMPLEX_AWS_ACCESS_KEY=your-access-key SIMPLEX_AWS_SECRET_ACCESS_KEY=your-secret-access-key iex -S mix
+
+2. Set them as the environment variables `AWS_ACCESS_KEY` and `AWS_SECRET_ACCESS_KEY`
+    ```
+    AWS_ACCESS_KEY=your-access-key AWS_SECRET_ACCESS_KEY=your-secret-access-key iex -S mix
+    
+    iex(1)> {:ok, simplex} = Simplex.new
+    {:ok, #PID<0.164.0>}
+    iex(2)> Simplex.aws_access_key(simplex)
+    "your-access-key"
+    iex(3)> Simplex.aws_secret_access_key(simplex)
+    "your-secret-access-key"
+    
     ```
 
 3. If not provided by the above two methods Simplex will attempt to retrieve keys from [instance metadata](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/iam-roles-for-amazon-ec2.html) if it's running in EC2 and you launched your instance with an IAM role with permission to access SimpleDB.
@@ -54,12 +66,18 @@ By default Simplex will send all requests to the us-east-1 SimpleDB url: `https:
 
 1. Setting it from within your application
     ```elixir
-    Simplex.simpledb_url "https://sdb.us-west-1.amazonaws.com"
+    {:ok, simplex} = Simplex.new
+    Simplex.simpledb_url(simplex, "https://sdb.us-west-1.amazonaws.com") 
     ```
 
-2. Set it as the environment variable `SIMPLEX_SIMPLEDB_URL`
+2. Set it as the environment variable `SIMPLEDB_URL`
     ```
-    SIMPLEX_SIMPLEDB_URL=https://sdb.us-west-1.amazonaws.com iex -S mix
+    SIMPLEDB_URL=https://sdb.us-west-1.amazonaws.com iex -S mix
+    
+    iex(1)> {:ok, simplex} = Simplex.new
+    {:ok, #PID<0.164.0>}
+    iex(2)> Simplex.simpledb_url(simplex)
+    "https://sdb.us-west-1.amazonaws.com"
     ```
 
 ## Responses
@@ -80,7 +98,7 @@ A Simplex response (third element of the tuple above) has the following fields:
 You can pattern match to determine how to handle the response:
 
   ```elixir
-  case Simplex.Domains.create "new_domain" do
+  case Simplex.Domains.create(simplex, "new_domain") do
     {:ok, result, response} ->
       # some happy path stuff here
     {:error, messages, response} ->
@@ -93,21 +111,21 @@ You can pattern match to determine how to handle the response:
 [Create](http://docs.aws.amazon.com/AmazonSimpleDB/latest/DeveloperGuide/SDB_API_CreateDomain.html) a new domain.
 
   ````elixir
-  Simplex.Domains.create "new_domain"
+  Simplex.Domains.create(simplex, "new_domain")
   ````
 
 [List](http://docs.aws.amazon.com/AmazonSimpleDB/latest/DeveloperGuide/SDB_API_ListDomains.html) domains.
 
   ````elixir
-  Simplex.Domains.list
+  Simplex.Domains.list(simplex)
 
-  Simplex.Domains.list(%{"MaxNumberOfDomains" => "10", "NextToken" => "token-from-previous-list-response"})
+  Simplex.Domains.list(simplex, %{"MaxNumberOfDomains" => "10", "NextToken" => "token-from-previous-list-response"})
   ````
 
 [Delete](http://docs.aws.amazon.com/AmazonSimpleDB/latest/DeveloperGuide/SDB_API_DeleteDomain.html) a domain.
 
   ````elixir
-  Simplex.Domains.delete "domain_to_delete"
+  Simplex.Domains.delete(simplex, "domain_to_delete")
   ````
 
 ## Attributes
@@ -115,9 +133,9 @@ You can pattern match to determine how to handle the response:
 [Get](http://docs.aws.amazon.com/AmazonSimpleDB/latest/DeveloperGuide/SDB_API_GetAttributes.html) attributes of an item.
 
   ````elixir
-  Simplex.Attributes.get("your_domain", "your_item_name")
+  Simplex.Attributes.get(simplex, "your_domain", "your_item_name")
 
-  Simplex.Attributes.get("your_domain", "your_item_name", %{"AttributeName" => "some_attribute", "ConsistentRead" => "true"})
+  Simplex.Attributes.get(simplex, "your_domain", "your_item_name", %{"AttributeName" => "some_attribute", "ConsistentRead" => "true"})
   ````
 
 [Put](http://docs.aws.amazon.com/AmazonSimpleDB/latest/DeveloperGuide/SDB_API_PutAttributes.html) attributes on an item (or create a new item).
@@ -128,7 +146,8 @@ You can pattern match to determine how to handle the response:
   # The replace tuple indicates that the value should replace the existing
   # value for that attribute, rather than be added to its values
 
-  Simplex.Attributes.put("your_domain",
+  Simplex.Attributes.put(simplex, 
+                         "your_domain",
                          "your_item_name",
                          %{"some_key"        => "some_value",
                            "another_key"     => ["a", "list", "of", "values"],
@@ -137,7 +156,8 @@ You can pattern match to determine how to handle the response:
 
   # put "some_value" in the "some_key" attribute only if
   # "other_key" has the "other_value" value
-  Simplex.Attributes.put("your_domain",
+  Simplex.Attributes.put(simplex, 
+                         "your_domain",
                          "your_item_name",
                          %{"some_key" => "some_value"},
                          %{"Name" => "other_key", "Value" => "other_value"})
@@ -147,12 +167,14 @@ You can pattern match to determine how to handle the response:
 
   ````elixir
   # Delete the "some_value" value from the "some_key" attribute
-  Simplex.Attributes.delete("your_domain",
+  Simplex.Attributes.delete(simplex, 
+                            "your_domain",
                             "your_item_name",
                             %{"some_key" => "some_value"})
 
   # Delete "your_item_name" if it doesn't have the "some_key" attribute
-  Simplex.Attributes.delete("your_domain",
+  Simplex.Attributes.delete(simplex, 
+                            "your_domain",
                             "your_item_name",
                             %{},
                             %{"Name" => "some_key", "Exists" => "false"})
@@ -163,7 +185,7 @@ You can pattern match to determine how to handle the response:
 [Select](http://docs.aws.amazon.com/AmazonSimpleDB/latest/DeveloperGuide/SDB_API_Select.html) attributes from items matching an expression.
 
   ````elixir
-  Simplex.Select.select("select * from your_domain where some_key = 'some_value'")
+  Simplex.Select.select(simplex, "select * from your_domain where some_key = 'some_value'")
   ````
 
 ----

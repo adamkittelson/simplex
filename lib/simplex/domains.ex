@@ -1,18 +1,18 @@
 defmodule Simplex.Domains do
   alias Simplex.Request
 
-  def create(name) do
-    Request.get(%{"Action" => "CreateDomain", "DomainName" => name})
+  def create(simplex, name) do
+    Request.get(%{"Action" => "CreateDomain", "DomainName" => name}, simplex)
   end
 
-  def list(params \\ %{}) do
+  def list(simplex, params \\ %{}) do
     params
     |> Map.merge(%{"Action" => "ListDomains"})
-    |> Request.get
+    |> Request.get(simplex)
   end
 
-  def delete(name) do
-    Request.get(%{"Action" => "DeleteDomain", "DomainName" => name})
+  def delete(simplex, name) do
+    Request.get(%{"Action" => "DeleteDomain", "DomainName" => name}, simplex)
   end
 
 end
