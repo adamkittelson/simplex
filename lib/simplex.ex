@@ -112,7 +112,12 @@ defmodule Simplex do
   end
 
   def handle_call(:get_aws_credentials, _from, config) do
-    {:reply, Map.take(config, [:aws_access_key, :aws_secret_access_key, :token]), config}
+    if needs_refresh?(:aws_secret_access_key, config) do
+      config = refresh(config)
+      {:reply, Map.take(config, [:aws_access_key, :aws_secret_access_key, :token]), config}
+    else
+      {:reply, Map.take(config, [:aws_access_key, :aws_secret_access_key, :token]), config}
+    end
   end
 
   def handle_call(:get_simpledb_url, _from, config) do
