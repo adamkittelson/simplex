@@ -1,32 +1,32 @@
 defmodule Simplex.Attributes do
   alias Simplex.Request
 
-  def get(domain_name, item_name, params \\ %{}) do
+  def get(simplex, domain_name, item_name, params \\ %{}) do
     params
     |> Map.merge(%{"Action"     => "GetAttributes",
                    "DomainName" => domain_name,
                    "ItemName"   => item_name})
-    |> Request.get
+    |> Request.get(simplex)
   end
 
-  def put(domain_name, item_name, attributes, expected \\ %{}) do
+  def put(simplex, domain_name, item_name, attributes, expected \\ %{}) do
     params = expected
              |> format_expected
              |> Map.merge(parse_attributes(attributes))
              |> Map.merge(%{"Action"     => "PutAttributes",
                             "DomainName" => domain_name,
                             "ItemName"   => item_name})
-    Request.get(params)
+    Request.get(params, simplex)
   end
 
-  def delete(domain_name, item_name, attributes \\ %{}, expected \\ %{}) do
+  def delete(simplex, domain_name, item_name, attributes \\ %{}, expected \\ %{}) do
     params = expected
              |> format_expected
              |> Map.merge(parse_attributes(attributes))
              |> Map.merge(%{"Action"     => "DeleteAttributes",
                             "DomainName" => domain_name,
                             "ItemName"   => item_name})
-    Request.get(params)
+    Request.get(params, simplex)
   end
 
   def parse_attributes(attributes) do

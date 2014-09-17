@@ -20,8 +20,7 @@ defmodule Simplex.Mixfile do
   #
   # Type `mix help compile.app` for more information
   def application do
-    [applications: [:logger, :httpoison],
-     mod: {Simplex, []}]
+    [applications: [:logger, :httpoison]]
   end
 
   # Dependencies can be hex.pm packages:

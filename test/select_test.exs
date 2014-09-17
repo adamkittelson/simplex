@@ -3,8 +3,8 @@ defmodule SelectTest do
   use ExVCR.Mock, adapter: ExVCR.Adapter.Hackney
 
   setup_all do
-    Simplex.aws_access_key "access-key"
-    Simplex.aws_secret_access_key "secret-access-key"
+    {:ok, simplex} = Simplex.new("access-key", "secret-access-key")
+    Process.register(simplex, :simplex)
 
     ExVCR.Config.cassette_library_dir("fixture/vcr_cassettes")
     HTTPoison.start
@@ -13,7 +13,7 @@ defmodule SelectTest do
 
   test "select queries" do
     use_cassette "select" do
-      {:ok, result, response} = Simplex.Select.select("select * from SelectTestDomain")
+      {:ok, result, response} = Simplex.Select.select(:simplex, "select * from SelectTestDomain")
       assert response.status_code == 200
       assert result == [%{attributes: %{"email_addresses" => "nova@apathydrive.com",
                                         "name" => "Nova"},

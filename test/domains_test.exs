@@ -3,8 +3,8 @@ defmodule DomainsTest do
   use ExVCR.Mock, adapter: ExVCR.Adapter.Hackney
 
   setup_all do
-    Simplex.aws_access_key "access-key"
-    Simplex.aws_secret_access_key "secret-access-key"
+    {:ok, simplex} = Simplex.new("access-key", "secret-access-key")
+    Process.register(simplex, :simplex)
 
     ExVCR.Config.cassette_library_dir("fixture/vcr_cassettes")
     HTTPoison.start
@@ -13,7 +13,7 @@ defmodule DomainsTest do
 
   test "creating a domain" do
     use_cassette "create_domain" do
-      {:ok, result, response} = Simplex.Domains.create("test_domain")
+      {:ok, result, response} = Simplex.Domains.create(:simplex, "test_domain")
       assert response.status_code == 200
       assert result == nil
       assert response.body == %{box_usage: "0.0055590278",
@@ -23,7 +23,7 @@ defmodule DomainsTest do
 
   test "listing domains" do
     use_cassette "list_domains" do
-      {:ok, result, response} = Simplex.Domains.list
+      {:ok, result, response} = Simplex.Domains.list(:simplex)
       assert response.status_code == 200
       assert result == ["test", "test_domain"]
       assert response.body == %{box_usage: "0.0000071759",
@@ -35,7 +35,7 @@ defmodule DomainsTest do
 
   test "deleting a domain" do
     use_cassette "delete_domain" do
-      {:ok, result, response} = Simplex.Domains.delete("test_domain")
+      {:ok, result, response} = Simplex.Domains.delete(:simplex, "test_domain")
       assert response.status_code == 200
       assert result == nil
       assert response.body == %{box_usage: "0.0055590278",
