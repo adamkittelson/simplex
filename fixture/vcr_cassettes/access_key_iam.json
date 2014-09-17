@@ -1,0 +1,54 @@
+[
+  {
+    "request": {
+      "body": "",
+      "headers": [],
+      "method": "get",
+      "options": {
+        "connect_timeout": 500
+      },
+      "url": "http://169.254.169.254/latest/meta-data/iam/security-credentials/"
+    },
+    "response": {
+      "body": "simpledb",
+      "headers": {
+        "Content-Type": "text/plain",
+        "Accept-Ranges": "bytes",
+        "ETag": "\"1611100828\"",
+        "Last-Modified": "Tue, 16 Sep 2014 20:09:26 GMT",
+        "Content-Length": "8",
+        "Connection": "close",
+        "Date": "Tue, 16 Sep 2014 21:02:21 GMT",
+        "Server": "EC2ws"
+      },
+      "status_code": 200,
+      "type": "ok"
+    }
+  },
+  {
+    "request": {
+      "body": "",
+      "headers": [],
+      "method": "get",
+      "options": {
+        "connect_timeout": 500
+      },
+      "url": "http://169.254.169.254/latest/meta-data/iam/security-credentials/simpledb"
+    },
+    "response": {
+      "body": "{\n  \"Code\" : \"Success\",\n  \"LastUpdated\" : \"2014-09-16T20:08:30Z\",\n  \"Type\" : \"AWS-HMAC\",\n  \"AccessKeyId\" : \"1234\",\n  \"SecretAccessKey\" : \"5678\",\n  \"Token\" : \"token\",\n  \"Expiration\" : \"2014-09-17T02:37:56Z\"\n}",
+      "headers": {
+        "Content-Type": "text/plain",
+        "Accept-Ranges": "bytes",
+        "ETag": "\"2645129023\"",
+        "Last-Modified": "Tue, 16 Sep 2014 20:09:26 GMT",
+        "Content-Length": "910",
+        "Connection": "close",
+        "Date": "Tue, 16 Sep 2014 21:02:21 GMT",
+        "Server": "EC2ws"
+      },
+      "status_code": 200,
+      "type": "ok"
+    }
+  }
+]

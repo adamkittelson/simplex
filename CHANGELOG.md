@@ -16,3 +16,6 @@ CHANGELOG
 
 ---- 0.1.0 / 2014-09-13 / ------------------------------------------------------
 * initial release to hex.pm
+
+---- 0.1.2 / 2014-09-17 / metadata-credentials ---------------------------------
+* retrieve access keys from IAM roles when running in EC2
