@@ -46,6 +46,8 @@ There are two ways to provide your keys to the Simplex library:
     SIMPLEX_AWS_ACCESS_KEY=your-access-key SIMPLEX_AWS_SECRET_ACCESS_KEY=your-secret-access-key iex -S mix
     ```
 
+3. If not provided by the above two methods Simplex will attempt to retrieve keys from [instance metadata](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/iam-roles-for-amazon-ec2.html) if it's running in EC2 and you launched your instance with an IAM role with permission to access SimpleDB.
+
 #### SimpleDB URL
 
 By default Simplex will send all requests to the us-east-1 SimpleDB url: `https://sdb.amazonaws.com`. If you want to use a [different region](http://docs.aws.amazon.com/general/latest/gr/rande.html#sdb_region) you can change the url by:
@@ -121,13 +123,13 @@ You can pattern match to determine how to handle the response:
 [Put](http://docs.aws.amazon.com/AmazonSimpleDB/latest/DeveloperGuide/SDB_API_PutAttributes.html) attributes on an item (or create a new item).
 
   ````elixir
-  # Attribute values can be strings, lists of strings, or a 
+  # Attribute values can be strings, lists of strings, or a
   # two-element tuple of :replace and a string or list of strings
   # The replace tuple indicates that the value should replace the existing
   # value for that attribute, rather than be added to its values
-  
-  Simplex.Attributes.put("your_domain", 
-                         "your_item_name", 
+
+  Simplex.Attributes.put("your_domain",
+                         "your_item_name",
                          %{"some_key"        => "some_value",
                            "another_key"     => ["a", "list", "of", "values"],
                            "yet_another_key" => {:replace, "a value to replace the existing value(s) of yet_another_key"},
@@ -136,7 +138,7 @@ You can pattern match to determine how to handle the response:
   # put "some_value" in the "some_key" attribute only if
   # "other_key" has the "other_value" value
   Simplex.Attributes.put("your_domain",
-                         "your_item_name", 
+                         "your_item_name",
                          %{"some_key" => "some_value"},
                          %{"Name" => "other_key", "Value" => "other_value"})
   ````
