@@ -21,6 +21,13 @@ Install the [Hex.pm](http://hex.pm) package
     end
     ```
 
+2. Add `:simplex` to your application dependencies:
+
+    ```elixir
+    def application do
+      [applications: [:simplex]]
+    end
+    ```
 
 ### Configuration
 
