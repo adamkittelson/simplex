@@ -2,14 +2,21 @@ defmodule Simplex do
   use GenServer
   use Timex
 
-  def new(access_key \\ nil, secret_access_key \\ nil) do
-    config = %{
-      :aws_access_key => access_key || System.get_env("AWS_ACCESS_KEY"),
-      :aws_secret_access_key => secret_access_key || System.get_env("AWS_SECRET_ACCESS_KEY"),
-      :simpledb_url => System.get_env("SIMPLEDB_URL") || "https://sdb.amazonaws.com"
-    }
+  def new do
+    start_link(%{})
+  end
 
-    GenServer.start_link(__MODULE__, config, [])
+  def new(access_key, secret_access_key) do
+    start_link(%{:aws_access_key => access_key, :aws_secret_access_key => secret_access_key})
+  end
+
+  def start_link(config, options \\ []) do
+    config = config
+             |> Map.put_new(:aws_access_key, System.get_env("AWS_ACCESS_KEY"))
+             |> Map.put_new(:aws_secret_access_key, System.get_env("AWS_SECRET_ACCESS_KEY"))
+             |> Map.put_new(:simpledb_url, System.get_env("SIMPLEDB_URL") || "https://sdb.amazonaws.com")
+
+    GenServer.start_link(__MODULE__, config, options)
   end
 
   def aws_access_key(simplex) do
