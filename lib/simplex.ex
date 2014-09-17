@@ -35,6 +35,10 @@ defmodule Simplex do
     GenServer.call(simplex, {:set_aws_secret_access_key, secret_access_key})
   end
 
+  def aws_credentials(simplex) do
+    GenServer.call(simplex, :get_aws_credentials)
+  end
+
   def simpledb_url(simplex) do
     GenServer.call(simplex, :get_simpledb_url)
   end
@@ -75,7 +79,8 @@ defmodule Simplex do
     update = %{
       :aws_access_key        => credentials_from_metadata["AccessKeyId"],
       :aws_secret_access_key => credentials_from_metadata["SecretAccessKey"],
-      :expires_at            => credentials_from_metadata["Expiration"]
+      :expires_at            => credentials_from_metadata["Expiration"],
+      :token                 => credentials_from_metadata["Token"]
     }
     Map.merge(config, update)
   end
@@ -106,6 +111,10 @@ defmodule Simplex do
     end
   end
 
+  def handle_call(:get_aws_credentials, _from, config) do
+    {:reply, Map.take(config, [:aws_access_key, :aws_secret_access_key, :token]), config}
+  end
+
   def handle_call(:get_simpledb_url, _from, config) do
     {:reply, config[:simpledb_url], config}
   end
@@ -114,6 +123,7 @@ defmodule Simplex do
     config = config
              |> Map.put(:aws_access_key, access_key)
              |> Map.delete(:expires_at)
+             |> Map.delete(:token)
     {:reply, config[:aws_access_key], config}
   end
 
@@ -121,6 +131,7 @@ defmodule Simplex do
     config = config
              |> Map.put(:aws_secret_access_key, secret_access_key)
              |> Map.delete(:expires_at)
+             |> Map.delete(:token)
     {:reply, config[:aws_secret_access_key], config}
   end
 
