@@ -22,3 +22,6 @@ CHANGELOG
 
 ---- 0.1.3 / 2014-09-17 / refactor-config --------------------------------------
 * allow multiple configs instead of one global config
+
+---- 0.2.3 / 2014-09-18 / token ------------------------------------------------
+* fix IAM credentials by including token
