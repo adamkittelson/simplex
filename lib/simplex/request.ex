@@ -27,26 +27,17 @@ defmodule Simplex.Request do
     "#{uri.scheme}://#{uri.authority}#{uri.path || "/"}?#{query}&Signature=#{signature}"
   end
 
-  defp auth_params(%{token: token} = aws_credentials) do
-    [
-      AWSAccessKeyId: aws_credentials[:aws_access_key],
-      SignatureVersion: 2,
-      SignatureMethod: "HmacSHA256",
-      Timestamp: DateFormat.format!(Date.now, "{ISOz}"),
-      SecurityToken: token
-    ]
-  end
-
   defp auth_params(aws_credentials) do
     [
       AWSAccessKeyId: aws_credentials[:aws_access_key],
       SignatureVersion: 2,
       SignatureMethod: "HmacSHA256",
       Timestamp: DateFormat.format!(Date.now, "{ISOz}")
-    ]
+    ] ++ auth_token(aws_credentials)
   end
 
-
+  defp auth_token(%{token: token}),  do: [SecurityToken: token]
+  defp auth_token(_aws_credentials), do: []
 
   defp query_string(params, aws_credentials) do
     Parameters.from_map(params) ++ [{:Version, "2009-04-15"}] ++ auth_params(aws_credentials)

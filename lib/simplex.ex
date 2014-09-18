@@ -20,7 +20,7 @@ defmodule Simplex do
   end
 
   def aws_access_key(simplex) do
-    GenServer.call(simplex, :get_aws_access_key)
+    aws_credentials(simplex)[:aws_access_key]
   end
 
   def aws_access_key(simplex, access_key) do
@@ -28,7 +28,7 @@ defmodule Simplex do
   end
 
   def aws_secret_access_key(simplex) do
-    GenServer.call(simplex, :get_aws_secret_access_key)
+    aws_credentials(simplex)[:aws_secret_access_key]
   end
 
   def aws_secret_access_key(simplex, secret_access_key) do
@@ -47,12 +47,12 @@ defmodule Simplex do
     GenServer.call(simplex, {:set_simpledb_url, url})
   end
 
-  defp needs_refresh?(:aws_access_key, config) do
-    expiring?(config) or !config[:aws_access_key]
+  defp needs_refresh?(config) do
+    expiring?(config) or missing_keys?(config)
   end
 
-  defp needs_refresh?(:aws_secret_access_key, config) do
-    expiring?(config) or !config[:aws_secret_access_key]
+  defp missing_keys?(config) do
+    !config[:aws_access_key] or !config[:aws_secret_access_key]
   end
 
   # keys expired or expiring within the next 60 seconds
@@ -75,14 +75,13 @@ defmodule Simplex do
   end
 
   defp refresh(config) do
-    credentials_from_metadata = load_credentials_from_metadata
-    update = %{
-      :aws_access_key        => credentials_from_metadata["AccessKeyId"],
-      :aws_secret_access_key => credentials_from_metadata["SecretAccessKey"],
-      :expires_at            => credentials_from_metadata["Expiration"],
-      :token                 => credentials_from_metadata["Token"]
-    }
-    Map.merge(config, update)
+    update = load_credentials_from_metadata
+
+    config
+    |> Map.put(:aws_access_key,        update["AccessKeyId"]     || config[:aws_access_key])
+    |> Map.put(:aws_secret_access_key, update["SecretAccessKey"] || config[:aws_secret_access_key])
+    |> Map.put(:expires_at,            update["Expiration"]      || config[:expires_at])
+    |> Map.put(:token,                 update["Token"]           || config[:token])
   end
 
 
@@ -93,26 +92,8 @@ defmodule Simplex do
     {:ok, config}
   end
 
-  def handle_call(:get_aws_access_key, _from, config) do
-    if needs_refresh?(:aws_access_key, config) do
-      config = refresh(config)
-      {:reply, config[:aws_access_key], config}
-    else
-      {:reply, config[:aws_access_key], config}
-    end
-  end
-
-  def handle_call(:get_aws_secret_access_key, _from, config) do
-    if needs_refresh?(:aws_secret_access_key, config) do
-      config = refresh(config)
-      {:reply, config[:aws_secret_access_key], config}
-    else
-      {:reply, config[:aws_secret_access_key], config}
-    end
-  end
-
   def handle_call(:get_aws_credentials, _from, config) do
-    if needs_refresh?(:aws_secret_access_key, config) do
+    if needs_refresh?(config) do
       config = refresh(config)
       {:reply, Map.take(config, [:aws_access_key, :aws_secret_access_key, :token]), config}
     else
