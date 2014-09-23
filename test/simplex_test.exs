@@ -16,15 +16,38 @@ defmodule SimplexTest do
       System.put_env("SIMPLEDB_URL", env_simpledburl)
     end
 
+    if env_simpledb_version = context[:env_simpledb_version] do
+      System.put_env("SIMPLEDB_VERSION", env_simpledb_version)
+    end
+
     ExVCR.Config.cassette_library_dir("fixture/vcr_cassettes")
 
     on_exit fn ->
       System.delete_env("AWS_ACCESS_KEY")
       System.delete_env("AWS_SECRET_ACCESS_KEY")
       System.delete_env("SIMPLEDB_URL")
+      System.delete_env("SIMPLEDB_VERSION")
     end
 
     :ok
+  end
+
+  test "gets default simpledb_version" do
+    {:ok, simplex} = Simplex.new
+    assert "2009-04-15" == Simplex.simpledb_version(simplex)
+  end
+
+  @tag env_simpledb_version: "2014-09-23"
+  test "gets simpledb_version from environment" do
+    {:ok, simplex} = Simplex.new
+    assert "2014-09-23" == Simplex.simpledb_version(simplex)
+  end
+
+  test "sets simpledb_version" do
+    {:ok, simplex} = Simplex.new
+    assert "2009-04-15" == Simplex.simpledb_version(simplex)
+    Simplex.simpledb_version(simplex, "2014-09-23")
+    assert "2014-09-23" == Simplex.simpledb_version(simplex)
   end
 
   test "gets default simpledb_url" do
@@ -41,7 +64,7 @@ defmodule SimplexTest do
   test "sets simpledb_url" do
     {:ok, simplex} = Simplex.new
     assert "https://sdb.amazonaws.com" == Simplex.simpledb_url(simplex)
-    Simplex.simpledb_url(simplex, "https://sdb.sa-east-1.amazonaws.com") 
+    Simplex.simpledb_url(simplex, "https://sdb.sa-east-1.amazonaws.com")
     assert "https://sdb.sa-east-1.amazonaws.com" == Simplex.simpledb_url(simplex)
   end
 

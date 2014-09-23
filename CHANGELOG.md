@@ -25,3 +25,6 @@ CHANGELOG
 
 ---- 0.2.3 / 2014-09-18 / token ------------------------------------------------
 * fix IAM credentials by including token
+
+---- 0.2.5 / 2014-09-23 / configurable-version ---------------------------------
+* allow configuration of simpledb version

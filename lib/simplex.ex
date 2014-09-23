@@ -15,12 +15,13 @@ defmodule Simplex do
              |> Map.put_new(:aws_access_key, System.get_env("AWS_ACCESS_KEY"))
              |> Map.put_new(:aws_secret_access_key, System.get_env("AWS_SECRET_ACCESS_KEY"))
              |> Map.put_new(:simpledb_url, System.get_env("SIMPLEDB_URL") || "https://sdb.amazonaws.com")
+             |> Map.put_new(:simpledb_version, System.get_env("SIMPLEDB_VERSION") || "2009-04-15")
 
     GenServer.start_link(__MODULE__, config, options)
   end
 
   def aws_access_key(simplex) do
-    aws_credentials(simplex)[:aws_access_key]
+    configuration(simplex)[:aws_access_key]
   end
 
   def aws_access_key(simplex, access_key) do
@@ -28,23 +29,31 @@ defmodule Simplex do
   end
 
   def aws_secret_access_key(simplex) do
-    aws_credentials(simplex)[:aws_secret_access_key]
+    configuration(simplex)[:aws_secret_access_key]
   end
 
   def aws_secret_access_key(simplex, secret_access_key) do
     GenServer.call(simplex, {:set_aws_secret_access_key, secret_access_key})
   end
 
-  def aws_credentials(simplex) do
-    GenServer.call(simplex, :get_aws_credentials)
+  def configuration(simplex) do
+    GenServer.call(simplex, :get_configuration)
   end
 
   def simpledb_url(simplex) do
-    GenServer.call(simplex, :get_simpledb_url)
+    configuration(simplex)[:simpledb_url]
   end
 
   def simpledb_url(simplex, url) do
     GenServer.call(simplex, {:set_simpledb_url, url})
+  end
+
+  def simpledb_version(simplex) do
+    configuration(simplex)[:simpledb_version]
+  end
+
+  def simpledb_version(simplex, version) do
+    GenServer.call(simplex, {:set_simpledb_version, version})
   end
 
   defp needs_refresh?(config) do
@@ -92,17 +101,13 @@ defmodule Simplex do
     {:ok, config}
   end
 
-  def handle_call(:get_aws_credentials, _from, config) do
+  def handle_call(:get_configuration, _from, config) do
     if needs_refresh?(config) do
       config = refresh(config)
-      {:reply, Map.take(config, [:aws_access_key, :aws_secret_access_key, :token]), config}
+      {:reply, config, config}
     else
-      {:reply, Map.take(config, [:aws_access_key, :aws_secret_access_key, :token]), config}
+      {:reply, config, config}
     end
-  end
-
-  def handle_call(:get_simpledb_url, _from, config) do
-    {:reply, config[:simpledb_url], config}
   end
 
   def handle_call({:set_aws_access_key, access_key}, _from, config) do
@@ -124,6 +129,11 @@ defmodule Simplex do
   def handle_call({:set_simpledb_url, url}, _from, config) do
     config = Map.put(config, :simpledb_url, url)
     {:reply, config[:simpledb_url], config}
+  end
+
+  def handle_call({:set_simpledb_version, version}, _from, config) do
+    config = Map.put(config, :simpledb_version, version)
+    {:reply, config[:simpledb_version], config}
   end
 
   def handle_info(_msg, config) do
