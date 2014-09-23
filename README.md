@@ -55,14 +55,14 @@ There are two ways to provide your keys to the Simplex library:
 2. Set them as the environment variables `AWS_ACCESS_KEY` and `AWS_SECRET_ACCESS_KEY`
     ```
     AWS_ACCESS_KEY=your-access-key AWS_SECRET_ACCESS_KEY=your-secret-access-key iex -S mix
-    
+
     iex(1)> {:ok, simplex} = Simplex.new
     {:ok, #PID<0.164.0>}
     iex(2)> Simplex.aws_access_key(simplex)
     "your-access-key"
     iex(3)> Simplex.aws_secret_access_key(simplex)
     "your-secret-access-key"
-    
+
     ```
 
 3. If not provided by the above two methods Simplex will attempt to retrieve keys from [instance metadata](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/iam-roles-for-amazon-ec2.html) if it's running in EC2 and you launched your instance with an IAM role with permission to access SimpleDB.
@@ -74,18 +74,39 @@ By default Simplex will send all requests to the us-east-1 SimpleDB url: `https:
 1. Setting it from within your application
     ```elixir
     {:ok, simplex} = Simplex.new
-    Simplex.simpledb_url(simplex, "https://sdb.us-west-1.amazonaws.com") 
+    Simplex.simpledb_url(simplex, "https://sdb.us-west-1.amazonaws.com")
     ```
 
 2. Set it as the environment variable `SIMPLEDB_URL`
     ```
     SIMPLEDB_URL=https://sdb.us-west-1.amazonaws.com iex -S mix
-    
+
     iex(1)> {:ok, simplex} = Simplex.new
     {:ok, #PID<0.164.0>}
     iex(2)> Simplex.simpledb_url(simplex)
     "https://sdb.us-west-1.amazonaws.com"
     ```
+
+#### SimpleDB Version
+
+By default Simplex will use the 2009-04-15 version of the SimpleDB API. If you wish to use a different version you can change it by:
+
+1. Setting it from within your application
+    ```elixir
+    {:ok, simplex} = Simplex.new
+    Simplex.simpledb_version(simplex, "2008-02-12")
+    ```
+
+2. Set it as the environment variable `SIMPLEDB_VERSION`
+    ```
+    SIMPLEDB_VERSION=2008-02-12 iex -S mix
+
+    iex(1)> {:ok, simplex} = Simplex.new
+    {:ok, #PID<0.164.0>}
+    iex(2)> Simplex.simpledb_version(simplex)
+    "2008-02-12"
+    ```
+
 
 ## Responses
 
@@ -153,7 +174,7 @@ You can pattern match to determine how to handle the response:
   # The replace tuple indicates that the value should replace the existing
   # value for that attribute, rather than be added to its values
 
-  Simplex.Attributes.put(simplex, 
+  Simplex.Attributes.put(simplex,
                          "your_domain",
                          "your_item_name",
                          %{"some_key"        => "some_value",
@@ -163,7 +184,7 @@ You can pattern match to determine how to handle the response:
 
   # put "some_value" in the "some_key" attribute only if
   # "other_key" has the "other_value" value
-  Simplex.Attributes.put(simplex, 
+  Simplex.Attributes.put(simplex,
                          "your_domain",
                          "your_item_name",
                          %{"some_key" => "some_value"},
@@ -174,13 +195,13 @@ You can pattern match to determine how to handle the response:
 
   ````elixir
   # Delete the "some_value" value from the "some_key" attribute
-  Simplex.Attributes.delete(simplex, 
+  Simplex.Attributes.delete(simplex,
                             "your_domain",
                             "your_item_name",
                             %{"some_key" => "some_value"})
 
   # Delete "your_item_name" if it doesn't have the "some_key" attribute
-  Simplex.Attributes.delete(simplex, 
+  Simplex.Attributes.delete(simplex,
                             "your_domain",
                             "your_item_name",
                             %{},
