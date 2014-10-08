@@ -17,13 +17,13 @@ defmodule Simplex.Request do
     Response.handle(params["Action"], response)
   end
 
-  def execute(signed_request), do: HTTPoison.get(signed_request)
+  def execute(signed_request), do: HTTPoison.get(signed_request, [], [timeout: 30000])
 
   def execute_with_retry(signed_request, attempts \\ 0, last_response \\ nil)
   def execute_with_retry(signed_request, attempts, _last_response) when attempts < @max_attempts do
     try do
       attempts |> delay |> :timer.sleep
-      case HTTPoison.get(signed_request) do
+      case HTTPoison.get(signed_request, [], [timeout: 30000]) do
         %HTTPoison.Response{status_code: status_code} = response when status_code >= 500 and status_code < 600 ->
           execute_with_retry signed_request, attempts + 1, response
         response ->
