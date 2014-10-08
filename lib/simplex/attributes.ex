@@ -6,7 +6,7 @@ defmodule Simplex.Attributes do
     |> Map.merge(%{"Action"     => "GetAttributes",
                    "DomainName" => domain_name,
                    "ItemName"   => item_name})
-    |> Request.get(simplex)
+    |> Request.get_with_retry(simplex)
   end
 
   def put(simplex, domain_name, item_name, attributes, expected \\ %{}) do
@@ -16,7 +16,7 @@ defmodule Simplex.Attributes do
              |> Map.merge(%{"Action"     => "PutAttributes",
                             "DomainName" => domain_name,
                             "ItemName"   => item_name})
-    Request.get(params, simplex)
+    Request.get_with_retry(params, simplex)
   end
 
   def delete(simplex, domain_name, item_name, attributes \\ %{}, expected \\ %{}) do
@@ -26,7 +26,7 @@ defmodule Simplex.Attributes do
              |> Map.merge(%{"Action"     => "DeleteAttributes",
                             "DomainName" => domain_name,
                             "ItemName"   => item_name})
-    Request.get(params, simplex)
+    Request.get_with_retry(params, simplex)
   end
 
   def parse_attributes(attributes) do
