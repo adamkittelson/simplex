@@ -28,3 +28,6 @@ CHANGELOG
 
 ---- 0.2.5 / 2014-09-23 / configurable-version ---------------------------------
 * allow configuration of simpledb version
+
+---- 0.2.6 / 2014-10-09 / retry-on-error ---------------------------------------
+* retry with exponential backoff for 500 errors
