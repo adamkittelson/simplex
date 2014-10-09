@@ -26,6 +26,7 @@ defmodule ErrorsTest do
     end
   end
 
+  @tag timeout: 90000
   test "Server Error" do
     use_cassette "server_error" do
       {:error, errors, response} = Simplex.Attributes.put(:simplex,

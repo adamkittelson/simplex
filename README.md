@@ -222,6 +222,4 @@ You can pattern match to determine how to handle the response:
 
 1. Implement [BatchDeleteAttributes](http://docs.aws.amazon.com/AmazonSimpleDB/latest/DeveloperGuide/SDB_API_BatchDeleteAttributes.html), [BatchPutAttributes](http://docs.aws.amazon.com/AmazonSimpleDB/latest/DeveloperGuide/SDB_API_BatchPutAttributes.html), and [DomainMetadata](http://docs.aws.amazon.com/AmazonSimpleDB/latest/DeveloperGuide/SDB_API_DomainMetadata.html)
 2. Docs
-3. [Retries and Exponential Backoff](http://docs.aws.amazon.com/AmazonSimpleDB/latest/DeveloperGuide/APIUsage.html#APIErrorRetries)
-4. Implement Select.select_all / Domains.list_all (automatically follow next_token to load more results if present)
-
+3. Implement Select.select_all / Domains.list_all (automatically follow next_token to load more results if present)
