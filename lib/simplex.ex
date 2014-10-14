@@ -74,8 +74,8 @@ defmodule Simplex do
 
   defp load_credentials_from_metadata do
    try do
-      %HTTPoison.Response{:body => role_name} = HTTPoison.get("http://169.254.169.254/latest/meta-data/iam/security-credentials/", [], [timeout: 500])
-      %HTTPoison.Response{:body => body} = HTTPoison.get("http://169.254.169.254/latest/meta-data/iam/security-credentials/#{role_name}", [], [timeout: 500])
+      %HTTPoison.Response{:body => role_name} = HTTPoison.get!("http://169.254.169.254/latest/meta-data/iam/security-credentials/", [], [timeout: 500])
+      %HTTPoison.Response{:body => body} = HTTPoison.get!("http://169.254.169.254/latest/meta-data/iam/security-credentials/#{role_name}", [], [timeout: 500])
       Poison.decode!(body)
     rescue
       _ ->

@@ -35,7 +35,7 @@ defmodule Simplex.Mixfile do
   def deps do
     [
       {:timex, "~> 0.12.5"},
-      {:httpoison, "~> 0.4.2"},
+      {:httpoison, "~> 0.5.0"},
       {:sweet_xml, "~> 0.1.1"},
       {:poison, "~> 1.2.0"},
       {:excoveralls, "~> 0.3", only: [:dev, :test]},
