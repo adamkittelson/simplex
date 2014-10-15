@@ -31,3 +31,6 @@ CHANGELOG
 
 ---- 0.2.6 / 2014-10-09 / retry-on-error ---------------------------------------
 * retry with exponential backoff for 500 errors
+
+---- 0.2.7 / 2014-10-15 / update-httpoison -------------------------------------
+* update httpoison
