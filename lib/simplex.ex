@@ -1,6 +1,7 @@
 defmodule Simplex do
   use GenServer
   use Timex
+  require Logger
 
   def new do
     start_link(%{})
@@ -72,7 +73,7 @@ defmodule Simplex do
   end
   defp expiring?(_config), do: false
 
-  defp load_credentials_from_metadata do
+  def load_credentials_from_metadata do
    try do
       %HTTPoison.Response{:body => role_name} = HTTPoison.get!("http://169.254.169.254/latest/meta-data/iam/security-credentials/", [], [timeout: 500])
       %HTTPoison.Response{:body => body} = HTTPoison.get!("http://169.254.169.254/latest/meta-data/iam/security-credentials/#{role_name}", [], [timeout: 500])
@@ -84,7 +85,9 @@ defmodule Simplex do
   end
 
   defp refresh(config) do
-    update = load_credentials_from_metadata
+    Logger.error "updating credentials"
+    {time, update} = :timer.tc(__MODULE__, :load_credentials_from_metadata, [])
+    Logger.error "time: #{time / 1000}ms, updated_credentials: #{inspect update}"
 
     config
     |> Map.put(:aws_access_key,        update["AccessKeyId"]     || config[:aws_access_key])
