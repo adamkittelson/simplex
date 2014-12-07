@@ -4,7 +4,7 @@ defmodule Simplex.Response do
 
   import SweetXml
 
-  def handle("CreateDomain", {:ok, %HTTPoison.Response{status_code: 200, body: body} = response}) do
+  def handle("CreateDomain", %HTTPotion.Response{status_code: 200, body: body} = response) do
     body = body
            |> xmap(request_id: ~x"//ResponseMetadata/RequestId/text()",
                    box_usage: ~x"//ResponseMetadata/BoxUsage/text()")
@@ -14,7 +14,7 @@ defmodule Simplex.Response do
     {:ok, nil, response}
   end
 
-  def handle("ListDomains", {:ok, %HTTPoison.Response{status_code: 200, body: body} = response}) do
+  def handle("ListDomains", %HTTPotion.Response{status_code: 200, body: body} = response) do
     body = body
            |> xmap(request_id: ~x"//ResponseMetadata/RequestId/text()",
                    box_usage: ~x"//ResponseMetadata/BoxUsage/text()",
@@ -25,7 +25,7 @@ defmodule Simplex.Response do
     {:ok, body[:result], response}
   end
 
-  def handle("DeleteDomain", {:ok, %HTTPoison.Response{status_code: 200, body: body} = response}) do
+  def handle("DeleteDomain", %HTTPotion.Response{status_code: 200, body: body} = response) do
       body = body
              |> xmap(request_id: ~x"//ResponseMetadata/RequestId/text()",
                      box_usage: ~x"//ResponseMetadata/BoxUsage/text()")
@@ -34,7 +34,7 @@ defmodule Simplex.Response do
      {:ok, nil, response}
   end
 
-  def handle("GetAttributes", {:ok, %HTTPoison.Response{status_code: 200, body: body} = response}) do
+  def handle("GetAttributes", %HTTPotion.Response{status_code: 200, body: body} = response) do
       body = body
              |> xmap(request_id: ~x"//ResponseMetadata/RequestId/text()",
                      box_usage: ~x"//ResponseMetadata/BoxUsage/text()",
@@ -58,7 +58,7 @@ defmodule Simplex.Response do
      {:ok, result, response}
   end
 
-  def handle("PutAttributes", {:ok, %HTTPoison.Response{status_code: 200, body: body} = response}) do
+  def handle("PutAttributes", %HTTPotion.Response{status_code: 200, body: body} = response) do
     body = body
            |> xmap(request_id: ~x"//ResponseMetadata/RequestId/text()",
                    box_usage: ~x"//ResponseMetadata/BoxUsage/text()")
@@ -68,7 +68,7 @@ defmodule Simplex.Response do
     {:ok, nil, response}
   end
 
-  def handle("DeleteAttributes", {:ok, %HTTPoison.Response{status_code: 200, body: body} = response}) do
+  def handle("DeleteAttributes", %HTTPotion.Response{status_code: 200, body: body} = response) do
     body = body
            |> xmap(request_id: ~x"//ResponseMetadata/RequestId/text()",
                    box_usage: ~x"//ResponseMetadata/BoxUsage/text()")
@@ -78,7 +78,7 @@ defmodule Simplex.Response do
     {:ok, nil, response}
   end
 
-  def handle("Select", {:ok, %HTTPoison.Response{status_code: 200, body: body} = response}) do
+  def handle("Select", %HTTPotion.Response{status_code: 200, body: body} = response) do
       body = body
              |> xmap(request_id: ~x"//ResponseMetadata/RequestId/text()",
                      box_usage: ~x"//ResponseMetadata/BoxUsage/text()",
@@ -110,10 +110,9 @@ defmodule Simplex.Response do
      {:ok, result, response}
   end
 
-  def handle(_action, {:ok, response}),    do: error(response)
-  def handle(_action, {:error, response}), do: error(response)
+  def handle(_action, response), do: error(response)
 
-  def error(%HTTPoison.Response{status_code: code, body: body} = response) when code >= 400 and code < 500 do
+  def error(%HTTPotion.Response{status_code: code, body: body} = response) when code >= 400 and code < 500 do
     body = body
            |> xmap(response: [~x"//Response",
                      errors: [~x".//Errors/Error"l,
@@ -128,7 +127,7 @@ defmodule Simplex.Response do
     {:error, format_errors(body[:response][:errors]), response}
   end
 
-  def error(%HTTPoison.Response{status_code: code, body: body} = response) when code >= 500 and code < 600 do
+  def error(%HTTPotion.Response{status_code: code, body: body} = response) when code >= 500 and code < 600 do
     body = body
            |> xmap(response: [~x"//Response",
                      errors: [~x".//Errors/Error"l,
@@ -141,9 +140,9 @@ defmodule Simplex.Response do
     {:error, format_errors(body[:response][:errors]), response}
   end
 
-  def error(%HTTPoison.Error{} = http_error) do
-    {:error, "HTTPoison.HTTPError: #{http_error.message}", %HTTPoison.Response{}}
-  end
+  # def error(%HTTPotion.Error{} = http_error) do
+  #   {:error, "HTTPotion.HTTPError: #{http_error.message}", %HTTPotion.Response{}}
+  # end
 
   defp format_errors(errors) do
     Enum.map(errors, &("#{&1[:code]}: #{&1[:message]}"))

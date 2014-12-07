@@ -1,13 +1,12 @@
 defmodule AttributesTest do
   use ExUnit.Case
-  use ExVCR.Mock, adapter: ExVCR.Adapter.Hackney
+  use ExVCR.Mock
 
   setup_all do
     {:ok, simplex} = Simplex.new("access-key", "secret-access-key")
     Process.register(simplex, :simplex)
 
     ExVCR.Config.cassette_library_dir("fixture/vcr_cassettes")
-    HTTPoison.start
     :ok
   end
 

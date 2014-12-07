@@ -20,7 +20,7 @@ defmodule Simplex.Mixfile do
   #
   # Type `mix help compile.app` for more information
   def application do
-    [applications: [:logger, :httpoison]]
+    [applications: [:logger, :httpotion]]
   end
 
   # Dependencies can be hex.pm packages:
@@ -35,11 +35,12 @@ defmodule Simplex.Mixfile do
   def deps do
     [
       {:timex, "~> 0.12.5"},
-      {:httpoison, "~> 0.5.0"},
+      {:httpotion, git: "git://github.com/myfreeweb/httpotion.git", ref: "6896eff1f013993437a5798af38efdd9b3f5d3eb", override: true},
+      {:ibrowse,   git: "git://github.com/cmullaparthi/ibrowse.git", tag: "v4.1.0"},
       {:sweet_xml, "~> 0.1.1"},
       {:poison, "~> 1.2.0"},
       {:excoveralls, "~> 0.3", only: [:dev, :test]},
-      {:exvcr, "~> 0.3.2", only: [:dev, :test]}
+      {:exvcr, "~> 0.3.5", only: [:dev, :test]}
     ]
   end
 
