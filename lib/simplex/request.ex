@@ -25,8 +25,6 @@ defmodule Simplex.Request do
     case HTTPotion.get(signed_request, [], [timeout: 30000]) do
       %HTTPotion.Response{status_code: status_code} = response when status_code >= 500 and status_code < 600 ->
         execute_with_retry signed_request, attempts + 1, response
-      # {:error, %HTTPotion.Error{} = e} ->
-      #   execute_with_retry signed_request, attempts + 1, {:error, e}
       response ->
         response
     end

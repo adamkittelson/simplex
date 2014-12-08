@@ -140,10 +140,6 @@ defmodule Simplex.Response do
     {:error, format_errors(body[:response][:errors]), response}
   end
 
-  # def error(%HTTPotion.Error{} = http_error) do
-  #   {:error, "HTTPotion.HTTPError: #{http_error.message}", %HTTPotion.Response{}}
-  # end
-
   defp format_errors(errors) do
     Enum.map(errors, &("#{&1[:code]}: #{&1[:message]}"))
   end
