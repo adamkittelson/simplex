@@ -1,6 +1,6 @@
 defmodule SimplexTest do
   use ExUnit.Case
-  use ExVCR.Mock, adapter: ExVCR.Adapter.Hackney
+  use ExVCR.Mock
 
   setup context do
 
@@ -98,7 +98,7 @@ defmodule SimplexTest do
     use_cassette "access_key_iam" do
       {:ok, simplex} = Simplex.new
       assert "1234" == Simplex.aws_access_key(simplex)
-      :meck.unload(:hackney)
+      :meck.unload(:ibrowse)
     end
   end
 
@@ -106,7 +106,7 @@ defmodule SimplexTest do
     use_cassette "access_secret_key_iam" do
       {:ok, simplex} = Simplex.new
       assert "5678" == Simplex.aws_secret_access_key(simplex)
-      :meck.unload(:hackney)
+      :meck.unload(:ibrowse)
     end
   end
 
