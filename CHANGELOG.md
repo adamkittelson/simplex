@@ -34,3 +34,6 @@ CHANGELOG
 
 ---- 0.2.7 / 2014-10-15 / update-httpoison -------------------------------------
 * update httpoison
+
+---- 0.2.8 / 2014-12-08 / httpotion --------------------------------------------
+* switch to httpotion / ibrowse
