@@ -22,8 +22,18 @@ defmodule Simplex.Request do
   def execute_with_retry(signed_request, attempts \\ 0, last_response \\ nil)
   def execute_with_retry(signed_request, attempts, _last_response) when attempts < @max_attempts do
     attempts |> delay |> :timer.sleep
-    case HTTPotion.get(signed_request, [], [timeout: 30000]) do
+
+    response = try do
+      HTTPotion.get(signed_request, [], [timeout: 30000])
+    rescue
+      e in HTTPotion.HTTPError ->
+        {:error, e}
+    end
+
+    case response do
       %HTTPotion.Response{status_code: status_code} = response when status_code >= 500 and status_code < 600 ->
+        execute_with_retry signed_request, attempts + 1, response
+      {:error, _error} = response ->
         execute_with_retry signed_request, attempts + 1, response
       response ->
         response
