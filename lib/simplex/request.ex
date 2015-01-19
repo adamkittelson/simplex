@@ -26,7 +26,7 @@ defmodule Simplex.Request do
     response = try do
       HTTPotion.get(signed_request, [], [timeout: 30000])
     rescue
-      e in HTTPotion.HTTPError ->
+      e ->
         {:error, e}
     end
 
