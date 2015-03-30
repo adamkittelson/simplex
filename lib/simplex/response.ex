@@ -40,9 +40,16 @@ defmodule Simplex.Response do
                      box_usage: ~x"//ResponseMetadata/BoxUsage/text()",
                      attributes: [~x"//GetAttributesResponse/GetAttributesResult/Attribute"le,
                        name: ~x".//Name/text()",
-                       value: ~x".//Value/text()"
+                       value: ~x".//Value/text()"l
                      ])
              |> stringify_values
+
+     attributes = body.attributes
+                   |> Enum.map(fn(%{value: value} = attribute) ->
+                        put_in attribute.value, Enum.join(value)
+                      end)
+
+     body = Map.put(body, :attributes, attributes)
 
      result = Enum.reduce(body[:attributes], %{}, fn(attribute, map) ->
                 case map[attribute[:name]] do
@@ -86,10 +93,22 @@ defmodule Simplex.Response do
                        name: ~x".//Name/text()",
                        attributes: [~x".//Attribute"l,
                          name: ~x"Name/text()",
-                         value: ~x".//Value/text()"
+                         value: ~x".//Value/text()"l
                        ]
                      ])
              |> stringify_values
+
+     items = body.items
+             |> Enum.map(fn(item) ->
+                  attributes = item.attributes
+                                |> Enum.map(fn(%{value: value} = attribute) ->
+                                     put_in attribute.value, Enum.join(value)
+                                   end)
+
+                   Map.put(item, :attributes, attributes)
+                end)
+
+     body = Map.put(body, :items, items)
 
      result = Enum.reduce(body[:items], [], fn(item, list) ->
                 attributes = Enum.reduce(item[:attributes], %{}, fn(attribute, map) ->

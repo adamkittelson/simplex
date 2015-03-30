@@ -35,21 +35,23 @@ defmodule AttributesTest do
 
   test "getting attributes" do
     :meck.expect(HTTPotion, :get, fn(_signed_request, [timeout: 30000]) ->
-                                    %HTTPotion.Response{body: "<?xml version=\"1.0\"?>\n<GetAttributesResponse xmlns=\"http://sdb.amazonaws.com/doc/2009-04-15/\"><GetAttributesResult><Attribute><Name>name</Name><Value>Adam</Value></Attribute><Attribute><Name>email_addresses</Name><Value>adam@apathydrive.com</Value></Attribute><Attribute><Name>email_addresses</Name><Value>adam@zencoder.com</Value></Attribute><Attribute><Name>email_addresses</Name><Value>akittelson@brightcove.com</Value></Attribute></GetAttributesResult><ResponseMetadata><RequestId>8bd4b9ed-da4c-679f-f568-9a52eed61b67</RequestId><BoxUsage>0.0000093282</BoxUsage></ResponseMetadata></GetAttributesResponse>",
+                                    %HTTPotion.Response{body: "<?xml version=\"1.0\"?>\n<GetAttributesResponse xmlns=\"http://sdb.amazonaws.com/doc/2009-04-15/\"><GetAttributesResult><Attribute><Name>name</Name><Value>Adam</Value></Attribute><Attribute><Name>url</Name><Value>http://brightcove.com?also=some&amp;query=string&amp;just=because</Value></Attribute><Attribute><Name>email_addresses</Name><Value>adam@apathydrive.com</Value></Attribute><Attribute><Name>email_addresses</Name><Value>adam@zencoder.com</Value></Attribute><Attribute><Name>email_addresses</Name><Value>akittelson@brightcove.com</Value></Attribute></GetAttributesResult><ResponseMetadata><RequestId>8bd4b9ed-da4c-679f-f568-9a52eed61b67</RequestId><BoxUsage>0.0000093282</BoxUsage></ResponseMetadata></GetAttributesResponse>",
                                     headers: ["Content-Type": "text/xml",
                                               "Transfer-Encoding": "chunked",
                                               Date: "Sat, 13 Sep 2014 22:11:11 GMT",
                                               Server: "Amazon SimpleDB"],
                                     status_code: 200}
                                   end)
-                                  
+
       {:ok, result, response} = Simplex.Attributes.get(:simplex, "AttributesTestDomain", "attribute_test_id")
       assert response.status_code == 200
       assert result == %{"name" => "Adam",
+                         "url" => "http://brightcove.com?also=some&query=string&just=because",
                          "email_addresses" => ["akittelson@brightcove.com",
                                                "adam@zencoder.com",
                                                "adam@apathydrive.com"]}
       assert response.body == %{attributes: [%{name: "name", value: "Adam"},
+                                             %{name: "url",  value: "http://brightcove.com?also=some&query=string&just=because"},
                                              %{name: "email_addresses", value: "adam@apathydrive.com"},
                                              %{name: "email_addresses", value: "adam@zencoder.com"},
                                              %{name: "email_addresses", value: "akittelson@brightcove.com"}],
