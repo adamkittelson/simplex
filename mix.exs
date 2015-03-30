@@ -40,7 +40,7 @@ defmodule Simplex.Mixfile do
       {:sweet_xml, "~> 0.1.1"},
       {:poison, "~> 1.2.0"},
       {:excoveralls, "~> 0.3", only: [:dev, :test]},
-      {:exvcr, "~> 0.3.5", only: [:dev, :test], optional: true}
+      {:meck, "~> 0.8.2", only: [:dev, :test]}
     ]
   end
 

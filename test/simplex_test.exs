@@ -1,6 +1,5 @@
 defmodule SimplexTest do
   use ExUnit.Case
-  use ExVCR.Mock
 
   setup context do
 
@@ -19,8 +18,6 @@ defmodule SimplexTest do
     if env_simpledb_version = context[:env_simpledb_version] do
       System.put_env("SIMPLEDB_VERSION", env_simpledb_version)
     end
-
-    ExVCR.Config.cassette_library_dir("fixture/vcr_cassettes")
 
     on_exit fn ->
       System.delete_env("AWS_ACCESS_KEY")
@@ -95,19 +92,51 @@ defmodule SimplexTest do
   end
 
   test "gets access_key from IAM" do
-    use_cassette "access_key_iam" do
-      {:ok, simplex} = Simplex.new
-      assert "1234" == Simplex.aws_access_key(simplex)
-      :meck.unload(:ibrowse)
-    end
+    :meck.expect(HTTPotion, :get, fn("http://169.254.169.254/latest/meta-data/iam/security-credentials/", [], [timeout: 500]) ->
+                                      %HTTPotion.Response{body: "simpledb",
+                                      headers: ["Content-Type": "text/plain",
+                                                "Transfer-Encoding": "chunked",
+                                                Date: "Sat, 13 Sep 2014 22:11:11 GMT",
+                                                Server: "EC2ws"],
+                                      status_code: 200}
+
+                                    ("http://169.254.169.254/latest/meta-data/iam/security-credentials/simpledb", [], [timeout: 500]) ->
+                                      %HTTPotion.Response{body: "{\n  \"Code\" : \"Success\",\n  \"LastUpdated\" : \"2014-09-16T20:08:30Z\",\n  \"Type\" : \"AWS-HMAC\",\n  \"AccessKeyId\" : \"1234\",\n  \"SecretAccessKey\" : \"5678\",\n  \"Token\" : \"token\",\n  \"Expiration\" : \"2014-09-17T02:37:56Z\"\n}",
+                                      headers: ["Content-Type": "text/plain",
+                                                "Transfer-Encoding": "chunked",
+                                                Date: "Sat, 13 Sep 2014 22:11:11 GMT",
+                                                Server: "EC2ws"],
+                                      status_code: 200}
+                                  end)
+
+    {:ok, simplex} = Simplex.new
+    assert "1234" == Simplex.aws_access_key(simplex)
+
+    :meck.unload(HTTPotion)
   end
 
   test "gets secret_key from IAM" do
-    use_cassette "access_secret_key_iam" do
-      {:ok, simplex} = Simplex.new
-      assert "5678" == Simplex.aws_secret_access_key(simplex)
-      :meck.unload(:ibrowse)
-    end
+    :meck.expect(HTTPotion, :get, fn("http://169.254.169.254/latest/meta-data/iam/security-credentials/", [], [timeout: 500]) ->
+                                      %HTTPotion.Response{body: "simpledb",
+                                      headers: ["Content-Type": "text/plain",
+                                                "Transfer-Encoding": "chunked",
+                                                Date: "Sat, 13 Sep 2014 22:11:11 GMT",
+                                                Server: "EC2ws"],
+                                      status_code: 200}
+
+                                    ("http://169.254.169.254/latest/meta-data/iam/security-credentials/simpledb", [], [timeout: 500]) ->
+                                      %HTTPotion.Response{body: "{\n  \"Code\" : \"Success\",\n  \"LastUpdated\" : \"2014-09-16T20:08:30Z\",\n  \"Type\" : \"AWS-HMAC\",\n  \"AccessKeyId\" : \"1234\",\n  \"SecretAccessKey\" : \"5678\",\n  \"Token\" : \"token\",\n  \"Expiration\" : \"2014-09-17T02:37:56Z\"\n}",
+                                      headers: ["Content-Type": "text/plain",
+                                                "Transfer-Encoding": "chunked",
+                                                Date: "Sat, 13 Sep 2014 22:11:11 GMT",
+                                                Server: "EC2ws"],
+                                      status_code: 200}
+                                  end)
+
+    {:ok, simplex} = Simplex.new
+    assert "5678" == Simplex.aws_secret_access_key(simplex)
+
+    :meck.unload(HTTPotion)
   end
 
 end
