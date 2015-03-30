@@ -5,7 +5,7 @@
   "exvcr": {:hex, :exvcr, "0.4.0"},
   "hackney": {:hex, :hackney, "1.0.6"},
   "httpoison": {:hex, :httpoison, "0.6.2"},
-  "httpotion": {:hex, :httpotion, "1.0.0"},
+  "httpotion": {:hex, :httpotion, "2.0.0"},
   "ibrowse": {:git, "git://github.com/cmullaparthi/ibrowse.git", "7871e2ebe8811efb64e1917e2de455fa87e8dfe3", [tag: "v4.1.0"]},
   "idna": {:hex, :idna, "1.0.2"},
   "jsex": {:hex, :jsex, "2.0.0"},

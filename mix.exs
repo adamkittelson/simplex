@@ -35,7 +35,7 @@ defmodule Simplex.Mixfile do
   def deps do
     [
       {:timex, "~> 0.12.5"},
-      {:httpotion, "~> 1.0.0"},
+      {:httpotion, "~> 2.0.0"},
       {:ibrowse, github: "cmullaparthi/ibrowse", tag: "v4.1.0"},
       {:sweet_xml, "~> 0.1.1"},
       {:poison, "~> 1.2.0"},

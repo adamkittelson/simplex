@@ -92,7 +92,7 @@ defmodule SimplexTest do
   end
 
   test "gets access_key from IAM" do
-    :meck.expect(HTTPotion, :get, fn("http://169.254.169.254/latest/meta-data/iam/security-credentials/", [], [timeout: 500]) ->
+    :meck.expect(HTTPotion, :get, fn("http://169.254.169.254/latest/meta-data/iam/security-credentials/", [timeout: 500]) ->
                                       %HTTPotion.Response{body: "simpledb",
                                       headers: ["Content-Type": "text/plain",
                                                 "Transfer-Encoding": "chunked",
@@ -100,7 +100,7 @@ defmodule SimplexTest do
                                                 Server: "EC2ws"],
                                       status_code: 200}
 
-                                    ("http://169.254.169.254/latest/meta-data/iam/security-credentials/simpledb", [], [timeout: 500]) ->
+                                    ("http://169.254.169.254/latest/meta-data/iam/security-credentials/simpledb", [timeout: 500]) ->
                                       %HTTPotion.Response{body: "{\n  \"Code\" : \"Success\",\n  \"LastUpdated\" : \"2014-09-16T20:08:30Z\",\n  \"Type\" : \"AWS-HMAC\",\n  \"AccessKeyId\" : \"1234\",\n  \"SecretAccessKey\" : \"5678\",\n  \"Token\" : \"token\",\n  \"Expiration\" : \"2014-09-17T02:37:56Z\"\n}",
                                       headers: ["Content-Type": "text/plain",
                                                 "Transfer-Encoding": "chunked",
@@ -116,7 +116,7 @@ defmodule SimplexTest do
   end
 
   test "gets secret_key from IAM" do
-    :meck.expect(HTTPotion, :get, fn("http://169.254.169.254/latest/meta-data/iam/security-credentials/", [], [timeout: 500]) ->
+    :meck.expect(HTTPotion, :get, fn("http://169.254.169.254/latest/meta-data/iam/security-credentials/", [timeout: 500]) ->
                                       %HTTPotion.Response{body: "simpledb",
                                       headers: ["Content-Type": "text/plain",
                                                 "Transfer-Encoding": "chunked",
@@ -124,7 +124,7 @@ defmodule SimplexTest do
                                                 Server: "EC2ws"],
                                       status_code: 200}
 
-                                    ("http://169.254.169.254/latest/meta-data/iam/security-credentials/simpledb", [], [timeout: 500]) ->
+                                    ("http://169.254.169.254/latest/meta-data/iam/security-credentials/simpledb", [timeout: 500]) ->
                                       %HTTPotion.Response{body: "{\n  \"Code\" : \"Success\",\n  \"LastUpdated\" : \"2014-09-16T20:08:30Z\",\n  \"Type\" : \"AWS-HMAC\",\n  \"AccessKeyId\" : \"1234\",\n  \"SecretAccessKey\" : \"5678\",\n  \"Token\" : \"token\",\n  \"Expiration\" : \"2014-09-17T02:37:56Z\"\n}",
                                       headers: ["Content-Type": "text/plain",
                                                 "Transfer-Encoding": "chunked",

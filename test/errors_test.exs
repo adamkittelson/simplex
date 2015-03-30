@@ -9,7 +9,7 @@ defmodule ErrorsTest do
   end
 
   test "Client Error" do
-    :meck.expect(HTTPotion, :get, fn(_signed_request, [], [timeout: 30000]) ->
+    :meck.expect(HTTPotion, :get, fn(_signed_request, [timeout: 30000]) ->
                                     %HTTPotion.Response{body: "<?xml version=\"1.0\"?>\n<Response><Errors><Error><Code>MissingParameter</Code><Message>No attributes</Message><BoxUsage>0.0000219907</BoxUsage></Error></Errors><RequestID>2cc5d1ca-2e08-7d24-06d3-cbc84698c503</RequestID></Response>",
                                     headers: ["Content-Type": "text/xml",
                                               "Transfer-Encoding": "chunked",
@@ -34,7 +34,7 @@ defmodule ErrorsTest do
 
   @tag timeout: 90000
   test "Server Error" do
-    :meck.expect(HTTPotion, :get, fn(_signed_request, [], [timeout: 30000]) ->
+    :meck.expect(HTTPotion, :get, fn(_signed_request, [timeout: 30000]) ->
                                     %HTTPotion.Response{body: "<?xml version=\"1.0\"?>\n<Response><Errors><Error><Code>InternalError</Code><Message>Request could not be executed due to an internal service error.</Message><BoxUsage>0.0000219907</BoxUsage></Error></Errors><RequestID>2cc5d1ca-2e08-7d24-06d3-cbc84698c503</RequestID></Response>",
                                     headers: ["Content-Type": "text/xml",
                                               "Transfer-Encoding": "chunked",

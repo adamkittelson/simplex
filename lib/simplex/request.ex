@@ -17,14 +17,14 @@ defmodule Simplex.Request do
     Response.handle(params["Action"], response)
   end
 
-  def execute(signed_request), do: HTTPotion.get(signed_request, [], [timeout: 30000])
+  def execute(signed_request), do: HTTPotion.get(signed_request, [timeout: 30000])
 
   def execute_with_retry(signed_request, attempts \\ 0, last_response \\ nil)
   def execute_with_retry(signed_request, attempts, _last_response) when attempts < @max_attempts do
     attempts |> delay |> :timer.sleep
 
     response = try do
-      HTTPotion.get(signed_request, [], [timeout: 30000])
+      HTTPotion.get(signed_request, [timeout: 30000])
     rescue
       e ->
         {:error, e}
