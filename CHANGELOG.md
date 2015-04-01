@@ -37,3 +37,6 @@ CHANGELOG
 
 ---- 0.2.8 / 2014-12-08 / httpotion --------------------------------------------
 * switch to httpotion / ibrowse
+
+---- 0.2.10 / 2015-04-01 / retry-httpotion-errors ------------------------------
+* retry errors, upgrade httpotion, remove exvcr test dependency
