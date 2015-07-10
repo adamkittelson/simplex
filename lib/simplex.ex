@@ -65,12 +65,19 @@ defmodule Simplex do
   end
 
   # keys expired or expiring within the next 60 seconds
-  defp expiring?(%{:expires_at => nil}), do: false
-  defp expiring?(%{:expires_at => expires_at}) do
+  def expiring?(%{:expires_at => nil}), do: false
+  def expiring?(%{:expires_at => expires_at}) do
     expires_at = DateFormat.parse!(expires_at, "{ISOz}")
-    Date.shift(Date.now, secs: 60) > expires_at
+
+    # Timex.Date.Compare/2:
+    # -1 — the first date comes before the second one
+    #  0 — both arguments represent the same date when coalesced to the same timezone.
+    #  1 — the first date comes after the second one
+    -1 == Date.now
+          |> Date.shift(secs: 60)
+          |> Date.compare(expires_at)
   end
-  defp expiring?(_config), do: false
+  def expiring?(_config), do: false
 
   defp load_credentials_from_metadata do
    try do
