@@ -40,3 +40,6 @@ CHANGELOG
 
 ---- 0.2.10 / 2015-04-01 / retry-httpotion-errors ------------------------------
 * retry errors, upgrade httpotion, remove exvcr test dependency
+
+---- 0.3.1 / 2015-07-10 / fix-key-refresh-date-comparison ----------------------
+* fix date comparison that determines when aws creds need refreshing
