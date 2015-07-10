@@ -1,5 +1,6 @@
 defmodule SimplexTest do
   use ExUnit.Case
+  use Timex
 
   setup context do
 
@@ -137,6 +138,56 @@ defmodule SimplexTest do
     assert "5678" == Simplex.aws_secret_access_key(simplex)
 
     :meck.unload(HTTPotion)
+  end
+
+  test "an expired key is expiring" do
+    one_week_ago = Date.now |> Date.shift(weeks: -1) |> DateFormat.format!("{ISOz}")
+
+    key = %{aws_access_key: "access_key",
+            aws_secret_access_key: "secret_access_key",
+            expires_at: one_week_ago,
+            simpledb_url: "https://sdb.amazonaws.com",
+            simpledb_version: "2009-04-15",
+            token: "token"}
+
+    assert Simplex.expiring?(key) == true
+  end
+
+  test "a key that expires 30 seconds from now is expiring" do
+    thirty_seconds_from_now = Date.now |> Date.shift(secs: 30) |> DateFormat.format!("{ISOz}")
+
+    key = %{aws_access_key: "access_key",
+            aws_secret_access_key: "secret_access_key",
+            expires_at: thirty_seconds_from_now,
+            simpledb_url: "https://sdb.amazonaws.com",
+            simpledb_version: "2009-04-15",
+            token: "token"}
+
+    assert Simplex.expiring?(key) == true
+  end
+
+  test "a key that expires 1 hour from now is not expiring" do
+    one_hour_from_now = Date.now |> Date.shift(hours: 1) |> DateFormat.format!("{ISOz}")
+
+    key = %{aws_access_key: "access_key",
+            aws_secret_access_key: "secret_access_key",
+            expires_at: one_hour_from_now,
+            simpledb_url: "https://sdb.amazonaws.com",
+            simpledb_version: "2009-04-15",
+            token: "token"}
+
+    assert Simplex.expiring?(key) == false
+  end
+
+  test "a key that expired at 2015-06-30T07:04:23Z is expiring" do
+    key = %{aws_access_key: "access_key",
+            aws_secret_access_key: "secret_access_key",
+            expires_at: "2015-06-30T07:04:23Z",
+            simpledb_url: "https://sdb.amazonaws.com",
+            simpledb_version: "2009-04-15",
+            token: "token"}
+
+    assert Simplex.expiring?(key) == true
   end
 
 end
