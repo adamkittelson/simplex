@@ -8,7 +8,7 @@ defmodule Simplex.Mixfile do
      elixir: "~> 1.1",
      deps: deps,
      package: [
-       contributors: ["Adam Kittelson"],
+       maintainers: ["Adam Kittelson"],
        licenses: ["MIT"],
        links: %{ github: "https://github.com/adamkittelson/simplex" },
        files: ["lib/*", "mix.exs", "README.md", "LICENSE.md", "CHANGELOG.md", "VERSION.yml"]
