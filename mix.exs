@@ -5,7 +5,7 @@ defmodule Simplex.Mixfile do
     [app: :simplex,
      version: version,
      test_coverage: [tool: ExCoveralls],
-     elixir: "~> 1.0.0",
+     elixir: "~> 1.1",
      deps: deps,
      package: [
        contributors: ["Adam Kittelson"],
@@ -20,7 +20,7 @@ defmodule Simplex.Mixfile do
   #
   # Type `mix help compile.app` for more information
   def application do
-    [applications: [:logger, :httpotion]]
+    [applications: [:logger, :httpotion, :tzdata]]
   end
 
   # Dependencies can be hex.pm packages:
@@ -34,12 +34,12 @@ defmodule Simplex.Mixfile do
   # Type `mix help deps` for more examples and options
   def deps do
     [
-      {:timex, "~> 0.12.5"},
-      {:httpotion, "~> 2.0.0"},
-      {:ibrowse, github: "cmullaparthi/ibrowse", tag: "v4.1.0"},
-      {:sweet_xml, "~> 0.1.1"},
-      {:poison, "~> 1.2.0"},
-      {:excoveralls, "~> 0.3", only: [:dev, :test]},
+      {:timex, "~> 1.0.0-rc4"},
+      {:httpotion, "~> 2.1"},
+      {:ibrowse,   "~> 4.2"},
+      {:sweet_xml, "~> 0.5"},
+      {:poison, "~> 1.5"},
+      {:excoveralls, "~> 0.4", only: [:dev, :test]},
       {:meck, "~> 0.8.2", only: [:dev, :test]}
     ]
   end
