@@ -43,3 +43,6 @@ CHANGELOG
 
 ---- 0.3.1 / 2015-07-10 / fix-key-refresh-date-comparison ----------------------
 * fix date comparison that determines when aws creds need refreshing
+
+---- 0.3.3 / 2015-12-16 / dep-updates ------------------------------------------
+* update dependencies

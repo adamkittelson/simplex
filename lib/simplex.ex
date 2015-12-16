@@ -73,9 +73,10 @@ defmodule Simplex do
     # -1 — the first date comes before the second one
     #  0 — both arguments represent the same date when coalesced to the same timezone.
     #  1 — the first date comes after the second one
-    -1 == Date.now
-          |> Date.shift(secs: 60)
-          |> Date.compare(expires_at)
+    1 ==
+      Date.now
+      |> Date.shift(secs: 60)
+      |> Date.compare(expires_at)
   end
   def expiring?(_config), do: false
 
