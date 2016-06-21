@@ -5,7 +5,7 @@ defmodule Simplex.Mixfile do
     [app: :simplex,
      version: version,
      test_coverage: [tool: ExCoveralls],
-     elixir: "~> 1.1",
+     elixir: "~> 1.3.0",
      deps: deps,
      package: [
        maintainers: ["Adam Kittelson"],
@@ -34,11 +34,11 @@ defmodule Simplex.Mixfile do
   # Type `mix help deps` for more examples and options
   def deps do
     [
-      {:timex, "~> 1.0.0-rc4"},
+      {:timex, "~> 2.1.0"},
       {:httpotion, "~> 2.1"},
       {:ibrowse,   "~> 4.2"},
       {:sweet_xml, "~> 0.5"},
-      {:poison, "~> 1.5"},
+      {:poison, "~> 2.0"},
       {:excoveralls, "~> 0.4", only: [:dev, :test]},
       {:meck, "~> 0.8.2", only: [:dev, :test]}
     ]

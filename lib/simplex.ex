@@ -67,16 +67,13 @@ defmodule Simplex do
   # keys expired or expiring within the next 60 seconds
   def expiring?(%{:expires_at => nil}), do: false
   def expiring?(%{:expires_at => expires_at}) do
-    expires_at = DateFormat.parse!(expires_at, "{ISOz}")
+    expires_at = Timex.parse!(expires_at, "{ISOz}")
+    sixty_seconds_from_now = DateTime.shift(DateTime.now, seconds: 60)
 
-    # Timex.Date.Compare/2:
     # -1 — the first date comes before the second one
     #  0 — both arguments represent the same date when coalesced to the same timezone.
     #  1 — the first date comes after the second one
-    1 ==
-      Date.now
-      |> Date.shift(secs: 60)
-      |> Date.compare(expires_at)
+    1 == DateTime.compare(sixty_seconds_from_now, expires_at)
   end
   def expiring?(_config), do: false
 

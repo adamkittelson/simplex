@@ -74,7 +74,7 @@ defmodule Simplex.Request do
       AWSAccessKeyId: config[:aws_access_key],
       SignatureVersion: 2,
       SignatureMethod: "HmacSHA256",
-      Timestamp: DateFormat.format!(Date.now, "{ISOz}")
+      Timestamp: Timex.format!(DateTime.now, "{ISOz}")
     ] ++ auth_token(config)
   end
 

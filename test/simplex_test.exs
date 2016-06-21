@@ -141,7 +141,7 @@ defmodule SimplexTest do
   end
 
   test "an expired key is expiring" do
-    one_week_ago = Date.now |> Date.shift(weeks: -1) |> DateFormat.format!("{ISOz}")
+    one_week_ago = DateTime.now |> DateTime.shift(weeks: -1) |> Timex.format!("{ISOz}")
 
     key = %{aws_access_key: "access_key",
             aws_secret_access_key: "secret_access_key",
@@ -154,7 +154,7 @@ defmodule SimplexTest do
   end
 
   test "a key that expires 30 seconds from now is expiring" do
-    thirty_seconds_from_now = Date.now |> Date.shift(secs: 30) |> DateFormat.format!("{ISOz}")
+    thirty_seconds_from_now = DateTime.now |> DateTime.shift(seconds: 30) |> Timex.format!("{ISOz}")
 
     key = %{aws_access_key: "access_key",
             aws_secret_access_key: "secret_access_key",
@@ -167,7 +167,7 @@ defmodule SimplexTest do
   end
 
   test "a key that expires 1 hour from now is not expiring" do
-    one_hour_from_now = Date.now |> Date.shift(hours: 1) |> DateFormat.format!("{ISOz}")
+    one_hour_from_now = DateTime.now |> DateTime.shift(hours: 1) |> Timex.format!("{ISOz}")
 
     key = %{aws_access_key: "access_key",
             aws_secret_access_key: "secret_access_key",
