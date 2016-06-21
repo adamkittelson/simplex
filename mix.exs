@@ -5,7 +5,7 @@ defmodule Simplex.Mixfile do
     [app: :simplex,
      version: version,
      test_coverage: [tool: ExCoveralls],
-     elixir: "~> 1.3.0",
+     elixir: "~> 1.2",
      deps: deps,
      package: [
        maintainers: ["Adam Kittelson"],
