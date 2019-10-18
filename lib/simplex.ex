@@ -11,11 +11,12 @@ defmodule Simplex do
   end
 
   def start_link(config, options \\ []) do
-    config = config
-             |> Map.put_new(:aws_access_key, System.get_env("AWS_ACCESS_KEY"))
-             |> Map.put_new(:aws_secret_access_key, System.get_env("AWS_SECRET_ACCESS_KEY"))
-             |> Map.put_new(:simpledb_url, System.get_env("SIMPLEDB_URL") || "https://sdb.amazonaws.com")
-             |> Map.put_new(:simpledb_version, System.get_env("SIMPLEDB_VERSION") || "2009-04-15")
+    config =
+      config
+      |> Map.put_new(:aws_access_key, System.get_env("AWS_ACCESS_KEY"))
+      |> Map.put_new(:aws_secret_access_key, System.get_env("AWS_SECRET_ACCESS_KEY"))
+      |> Map.put_new(:simpledb_url, System.get_env("SIMPLEDB_URL") || "https://sdb.amazonaws.com")
+      |> Map.put_new(:simpledb_version, System.get_env("SIMPLEDB_VERSION") || "2009-04-15")
 
     GenServer.start_link(__MODULE__, config, options)
   end
@@ -66,21 +67,32 @@ defmodule Simplex do
 
   # keys expired or expiring within the next 60 seconds
   def expiring?(%{:expires_at => nil}), do: false
-  def expiring?(%{:expires_at => expires_at}) do
-    expires_at = Timex.parse!(expires_at, "{ISOz}")
-    sixty_seconds_from_now = DateTime.shift(DateTime.now, seconds: 60)
 
-    # -1 — the first date comes before the second one
-    #  0 — both arguments represent the same date when coalesced to the same timezone.
-    #  1 — the first date comes after the second one
-    1 == DateTime.compare(sixty_seconds_from_now, expires_at)
+  def expiring?(%{:expires_at => expires_at}) do
+    expires_at = Timex.parse!(expires_at, "{ISO:Extended:Z}")
+    sixty_seconds_from_now = Timex.shift(DateTime.utc_now(), seconds: 60)
+
+    # :lt — the first date comes before the second one
+    # :eq — both arguments represent the same date when coalesced to the same timezone.
+    # :gt — the first date comes after the second one
+    :gt == DateTime.compare(sixty_seconds_from_now, expires_at)
   end
+
   def expiring?(_config), do: false
 
   defp load_credentials_from_metadata do
-   try do
-      %HTTPotion.Response{:body => role_name} = HTTPotion.get("http://169.254.169.254/latest/meta-data/iam/security-credentials/", [timeout: 500])
-      %HTTPotion.Response{:body => body} = HTTPotion.get("http://169.254.169.254/latest/meta-data/iam/security-credentials/#{role_name}", [timeout: 500])
+    try do
+      %HTTPotion.Response{:body => role_name} =
+        HTTPotion.get("http://169.254.169.254/latest/meta-data/iam/security-credentials/",
+          timeout: 500
+        )
+
+      %HTTPotion.Response{:body => body} =
+        HTTPotion.get(
+          "http://169.254.169.254/latest/meta-data/iam/security-credentials/#{role_name}",
+          timeout: 500
+        )
+
       Poison.decode!(body)
     rescue
       _ ->
@@ -89,15 +101,17 @@ defmodule Simplex do
   end
 
   defp refresh(config) do
-    update = load_credentials_from_metadata
+    update = load_credentials_from_metadata()
 
     config
-    |> Map.put(:aws_access_key,        update["AccessKeyId"]     || config[:aws_access_key])
-    |> Map.put(:aws_secret_access_key, update["SecretAccessKey"] || config[:aws_secret_access_key])
-    |> Map.put(:expires_at,            update["Expiration"]      || config[:expires_at])
-    |> Map.put(:token,                 update["Token"]           || config[:token])
+    |> Map.put(:aws_access_key, update["AccessKeyId"] || config[:aws_access_key])
+    |> Map.put(
+      :aws_secret_access_key,
+      update["SecretAccessKey"] || config[:aws_secret_access_key]
+    )
+    |> Map.put(:expires_at, update["Expiration"] || config[:expires_at])
+    |> Map.put(:token, update["Token"] || config[:token])
   end
-
 
   ###################
   # Server Callbacks
@@ -116,18 +130,22 @@ defmodule Simplex do
   end
 
   def handle_call({:set_aws_access_key, access_key}, _from, config) do
-    config = config
-             |> Map.put(:aws_access_key, access_key)
-             |> Map.delete(:expires_at)
-             |> Map.delete(:token)
+    config =
+      config
+      |> Map.put(:aws_access_key, access_key)
+      |> Map.delete(:expires_at)
+      |> Map.delete(:token)
+
     {:reply, config[:aws_access_key], config}
   end
 
   def handle_call({:set_aws_secret_access_key, secret_access_key}, _from, config) do
-    config = config
-             |> Map.put(:aws_secret_access_key, secret_access_key)
-             |> Map.delete(:expires_at)
-             |> Map.delete(:token)
+    config =
+      config
+      |> Map.put(:aws_secret_access_key, secret_access_key)
+      |> Map.delete(:expires_at)
+      |> Map.delete(:token)
+
     {:reply, config[:aws_secret_access_key], config}
   end
 
@@ -144,5 +162,4 @@ defmodule Simplex do
   def handle_info(_msg, config) do
     {:noreply, config}
   end
-
 end
