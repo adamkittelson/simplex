@@ -74,8 +74,8 @@ defmodule Simplex.Request do
     signature =
       :crypto.hmac(
         :sha256,
-        String.to_char_list(config[:aws_secret_access_key]),
-        String.to_char_list(request)
+        String.to_charlist(config[:aws_secret_access_key]),
+        String.to_charlist(request)
       )
       |> :base64.encode()
       |> URI.encode()
