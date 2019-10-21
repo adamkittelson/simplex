@@ -6,6 +6,7 @@ defmodule Simplex.Mixfile do
       app: :simplex,
       version: version(),
       test_coverage: [tool: ExCoveralls],
+      preferred_cli_env: [coveralls: :test],
       elixir: "~> 1.9",
       deps: deps(),
       package: [
@@ -40,7 +41,7 @@ defmodule Simplex.Mixfile do
       {:httpotion, "~> 3.1.3"},
       {:sweet_xml, "~> 0.5"},
       {:poison, "~> 2.0"},
-      {:excoveralls, "~> 0.4", only: [:dev, :test]},
+      {:excoveralls, "~> 0.12.0", only: [:dev, :test]},
       {:meck, "~> 0.8.13", only: [:dev, :test]}
     ]
   end
