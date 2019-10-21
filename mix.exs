@@ -39,8 +39,8 @@ defmodule Simplex.Mixfile do
     [
       {:timex, "~> 3.6.1"},
       {:httpotion, "~> 3.1.3"},
+      {:jason, ">= 0.0.0"},
       {:sweet_xml, "~> 0.5"},
-      {:poison, "~> 2.0"},
       {:excoveralls, "~> 0.12.0", only: [:dev, :test]},
       {:meck, "~> 0.8.13", only: [:dev, :test]}
     ]

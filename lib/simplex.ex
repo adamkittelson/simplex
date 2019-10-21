@@ -93,7 +93,7 @@ defmodule Simplex do
           timeout: 500
         )
 
-      Poison.decode!(body)
+      Jason.decode!(body)
     rescue
       _ ->
         %{}
