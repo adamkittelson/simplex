@@ -23,7 +23,7 @@ defmodule Simplex.Mixfile do
   #
   # Type `mix help compile.app` for more information
   def application do
-    [applications: [:logger, :httpotion, :tzdata]]
+    [applications: [:logger, :httpotion, :tzdata, :hackney]]
   end
 
   # Dependencies can be hex.pm packages:
@@ -40,7 +40,7 @@ defmodule Simplex.Mixfile do
       {:timex, "~> 3.6.1"},
       {:httpotion, "~> 3.1.3"},
       {:jason, ">= 0.0.0"},
-      {:sweet_xml, "~> 0.5"},
+      {:sweet_xml, "~> 0.6.0"},
       {:excoveralls, "~> 0.12.0", only: [:dev, :test]},
       {:meck, "~> 0.8.13", only: [:dev, :test]}
     ]
